@@ -7,7 +7,7 @@ import datetime
 import random
 
 choiceStr = ["SHOULD","SHOULDN'T"]
-meditate = random.randrand(0,2)
+meditate = random.randrange(0,2)
 
 message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
                  subject = "Email job",
