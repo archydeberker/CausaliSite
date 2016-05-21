@@ -10,8 +10,8 @@ $client = new MongoClient($uri);
 $db = $client->selectDB("zapscience");
 $entries = $db->entries;
 // To insert a dict, use the insert method.
-$name = .$_POST["name"]
-$email = .$_POST["email"]
+$name = .$_POST["name"];
+$email = .$_POST["email"];
 
 $entries->insert(array(
 	'name' => $name,
