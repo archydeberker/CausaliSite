@@ -1,2 +1,2 @@
-web: gunicorn gettingstarted.wsgi --log-file -
-email: python archyEmail.py
+
+web: python archyEmail.py
