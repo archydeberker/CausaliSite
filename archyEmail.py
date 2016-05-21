@@ -16,6 +16,9 @@ settings.configure()
 
 message.send()
 
-logging.info('message..')
-
-print 'Email Sent Successfully'
+import pymongo
+uri = os.environ['MONGO_URI']
+client = pymongo.MongoClient(uri)
+usersCol = client['zapscience'].users
+usersCol.insert({'name': sys.argv[1], 'email': sys.argv[2]})
+client.close()
