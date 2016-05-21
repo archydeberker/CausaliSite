@@ -8,5 +8,4 @@ message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
                  text_body = "Hello",
                  tag = "hello")
 
-settings.configure() # for Django?
 message.send()
