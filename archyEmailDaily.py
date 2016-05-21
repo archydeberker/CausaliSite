@@ -24,6 +24,6 @@ import pymongo
 uri = os.environ['MONGO_URI']
 client = pymongo.MongoClient(uri)
 usersCol = client['zapscience'].users
-usersCol.insert({'name': "archy", 'email': "a@deberker.com",'meditate_today':meditate)
+usersCol.insert({'name': "archy", 'email': "a@deberker.com",'meditate_today':meditate})
 client.close()
 
