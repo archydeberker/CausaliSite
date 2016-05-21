@@ -13,7 +13,7 @@ message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
                  subject = "Email job",
                  sender = "a@deberker.com",
                  to = "a@deberker.com",
-                 text_body = "Sent at " + datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S') ". Today you " choiceStr[meditate] "meditate!" ,
+                 text_body = "Sent at " + datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S') + ". Today you " + choiceStr[meditate] + "meditate!" ,
                  tag = "hello")
 
 settings.configure()
