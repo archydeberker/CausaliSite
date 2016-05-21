@@ -136,3 +136,9 @@ STATICFILES_DIRS = (
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
+POSTMARK_API_KEY     = '4322111a-0d75-4777-8111-2d83f0664762'
+POSTMARK_SENDER      = 'a@deberker.com'
+POSTMARK_TEST_MODE   = [False]
+POSTMARK_TRACK_OPENS = [True]
+
+
