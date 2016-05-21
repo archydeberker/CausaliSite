@@ -1,4 +1,5 @@
 import os
+import logging
 from postmark import PMMail
 from django.conf import settings
 
@@ -13,5 +14,7 @@ message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
 settings.configure()
 
 message.send()
+
+logging.info('message..')
 
 print 'Email Sent Successfully'

@@ -1,1 +1,2 @@
 Django
+python-postmark>=0.4.3
