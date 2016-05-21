@@ -12,8 +12,7 @@ $message = "Line 1\r\nLine 2\r\nLine 3";
 $message = wordwrap($message, 70, "\r\n");
 
 // Send
-$item = $_POST["name"];
-exec("python archyEmail.py $item");
+exec("python archyEmail.py $_POST["name"] $_POST["email"]");
 ?>
 
 </body>

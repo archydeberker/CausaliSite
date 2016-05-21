@@ -6,7 +6,7 @@ from django.conf import settings
 
 
 message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
-                 subject = "Hello from Postmark",
+                 subject = "first part of concatenated string " + sys.argv[2],
                  sender = "a@deberker.com",
                  to = "a@deberker.com",
                  text_body = sys.argv[1],
