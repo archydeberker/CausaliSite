@@ -1,3 +1,5 @@
+<html>
+<body>
 <?php
 /*
  * Standard single-node URI format: 
@@ -29,3 +31,6 @@ foreach($cursor as $doc) {
 // Only close the connection when your app is terminating
 $client->close();
 ?>
+
+</body>
+</html>
