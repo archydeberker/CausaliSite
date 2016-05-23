@@ -3,6 +3,7 @@ import sys
 import logging
 from postmark import PMMail
 from django.conf import settings
+import database.db_utils
 
 
 message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
@@ -16,9 +17,5 @@ settings.configure()
 
 message.send()
 
-import pymongo
-uri = os.environ['MONGO_URI']
-client = pymongo.MongoClient(uri)
-usersCol = client['zapscience'].users
-usersCol.insert({'name': sys.argv[1], 'email': sys.argv[2]})
-client.close()
+# write to database
+db_utils.store_user(name=sys.argv[1], email=sys.arg[2])
