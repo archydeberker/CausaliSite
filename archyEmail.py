@@ -3,7 +3,7 @@ import sys
 import logging
 from postmark import PMMail
 from django.conf import settings
-import database.db_utils
+import database.db_utils as db_utils
 
 
 message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
