@@ -2,7 +2,6 @@
 import pymongo
 import sys
 import os
-import hashlib
 import datetime
 
 # find the database URI. If not available in the environment, assume running locally
@@ -42,7 +41,10 @@ def close_connection(client):
 def store_user(name, email, collection=None):
 	""" Store user info in a collection.
 	As I understand it you don't have to sanitise inputs in MongoDB unless you're concatenating strings.
-	Adds a hash of the email, not necessarily unique
+	Instead of using the has we can use the objectID in the mongoDB database, which is unique. 
+	HOWEVER, IT MIGHT BE EASY TO PREDICT WHAT OTHER OBJECT IDS LOOK LIKE BASED ON YOUR OWN, so
+	should probably start using a random string at some point. 
+	
 	Input:
 		name 		string
 		email 		string
@@ -57,15 +59,8 @@ def store_user(name, email, collection=None):
 	result = collection.insert_one({
 		name: name,
 		email: email,
-		hashID: hash(email), # hashed version of email using the custom function in this doc
 		created_at:  datetime.datetime.utcnow(),
 		last_updated: datetime.datetime.utcnow(),
 		first_name: name.partition(' ')[0] # get the first part of the name until a space (or whole thing if no space)
 		})
 	return result._id
-
-
-def hash(str):
-	# hashes a string using hashlib
-	# https://docs.python.org/2/library/hashlib.html
-	return hashlib.sha224(str).hexdigest()
