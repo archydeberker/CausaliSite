@@ -57,10 +57,10 @@ def store_user(name, email, collection=None):
 		client, db, collection = open_connection()
 	# write the user info to the database
 	result = collection.insert_one({
-		name: name,
-		email: email,
-		created_at:  datetime.datetime.utcnow(),
-		last_updated: datetime.datetime.utcnow(),
-		first_name: name.partition(' ')[0] # get the first part of the name until a space (or whole thing if no space)
+		'name': name,
+		'email': email,
+		'created_at':  datetime.datetime.utcnow(),
+		'last_updated': datetime.datetime.utcnow(),
+		'first_name': name.partition(' ')[0] # get the first part of the name until a space (or whole thing if no space)
 		})
 	return result._id
