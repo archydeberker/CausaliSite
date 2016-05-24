@@ -63,4 +63,4 @@ def store_user(name, email, collection=None):
 		'last_updated': datetime.datetime.utcnow(),
 		'first_name': name.partition(' ')[0] # get the first part of the name until a space (or whole thing if no space)
 		})
-	return result._id
+	return result.inserted_id
