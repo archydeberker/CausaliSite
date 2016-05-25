@@ -38,7 +38,7 @@ def close_connection(client):
 	client.close()
 
 
-def store_user(name, email, collection=None):
+def store_user(name, email, collection=None, timezone=0):
 	""" Store user info in a collection.
 	As I understand it you don't have to sanitise inputs in MongoDB unless you're concatenating strings.
 	Instead of using the has we can use the objectID in the mongoDB database, which is unique. 
@@ -49,8 +49,9 @@ def store_user(name, email, collection=None):
 		name 		string
 		email 		string
 		collection 	pymongo handle to collection, as provided by open_connection(). If not provided, opens connection using open_connection()
+		timezone 	number (int or float) indicating offset from UTC
 	Returns:
-		_id 		_id (unique ID) of written doc 
+		_id 		_id (unique ID) of written user 
 	"""
 	# get default collection if none is provided
 	if not collection:
@@ -61,6 +62,48 @@ def store_user(name, email, collection=None):
 		'email': email,
 		'created_at':  datetime.datetime.utcnow(),
 		'last_updated': datetime.datetime.utcnow(),
+		'timezone': timezone,
 		'first_name': name.partition(' ')[0] # get the first part of the name until a space (or whole thing if no space)
 		})
 	return result.inserted_id
+
+	
+def init_trials(user_id, experiment_id, ):
+	""" Initialises all the trials for an experiment for a user, reading a document in the 'experiments' database and populating the 'trials' database with trials
+	This assumes that the experiment already exists in the database, and simply reads out the experiments and makes sure all reminders are set, timezones are corrected,
+	and order of conditions is randomised
+	"""
+
+	
+		
+def init_experiment_meditation():
+	""" temporary code to initialise the meditation experiment in the database. Helpful to identify what variables to store and how to name them
+	
+	"""
+	# open a new connection
+	client, db, collection = open_connection()
+	# set the experiments collection
+	collection = db['experiments']
+	# fill with single experiment, replacing if duplicate name exists FOR DEBUGGING PURPOSES (otherwise you get tons of entries for meditation)
+	collection.update({'name': 'meditation'}, {"$set": {
+		'name': 'meditation',
+		'conditions': ["meditate", "do not meditate"],
+		'dependent_vars': ["happiness"],
+		'nTrials': np.array([10, 10]),
+		'condition_prompt': , #time of day
+		'response_prompt': , #time of day
+		'randomise': 'max3' #indicates max 3 times the same condition in a row
+		}}, upsert=True)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
