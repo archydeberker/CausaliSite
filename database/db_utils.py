@@ -49,7 +49,7 @@ def store_user(name, email, collection=None, timezone=0):
 		name 		string
 		email 		string
 		collection 	pymongo handle to collection, as provided by open_connection(). If not provided, opens connection using open_connection()
-		timezone 	number (int or float) indicating offset from UTC
+		timezone 	number (int or float) indicating offset from UTC (should use proper timezone stuff [pytz] at some point, but too big a hassle for now)
 	Returns:
 		_id 		_id (unique ID) of written user 
 	"""
@@ -85,25 +85,22 @@ def init_experiment_meditation():
 	# set the experiments collection
 	collection = db['experiments']
 	# fill with single experiment, replacing if duplicate name exists FOR DEBUGGING PURPOSES (otherwise you get tons of entries for meditation)
-	collection.update({'name': 'meditation'}, {"$set": {
-		'name': 'meditation',
-		'conditions': ["meditate", "do not meditate"],
-		'dependent_vars': ["happiness"],
-		'nTrials': np.array([10, 10]),
-		'condition_prompt': , #time of day
-		'response_prompt': , #time of day
-		'randomise': 'max3' #indicates max 3 times the same condition in a row
-		}}, upsert=True)
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	# and inserting if it doesn't exist yet.
+	collection.update_one({'name': 'meditation'}, {
+		"$set": {
+			'name': 'meditation',
+			'conditions': ["meditate", "do not meditate"],
+			'dependent_vars': ["happiness"],
+			'nTrials': np.array([10, 10]),
+			'condition_prompt': datetime.time(7), #time of day (first arg is hour of day, 0 to 24
+			'response_prompt': datetime.time(15), #time of day
+			'randomise': 'max3' #as example for now; indicates max 3 times the same condition in a row
+		},
+		# set last_modified to the current date
+		"$currentDate": 
+			{"last_modified": True}
+		# set upsert to insert the document if no document is found to update.
+		}, upsert=True)
 	
 	
 	
