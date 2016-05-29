@@ -51,7 +51,7 @@ def store_user(name, email, collection=None, timezone=0):
 		collection 	pymongo handle to collection, as provided by open_connection(). If not provided, opens connection using open_connection()
 		timezone 	number (int or float) indicating offset from UTC (should use proper timezone stuff [pytz] at some point, but too big a hassle for now)
 	Returns:
-		_id 		_id (unique ID) of written user 
+		result 		contains unique id of user as insert_results.inserted_id
 	"""
 	# get default collection if none is provided
 	if not collection:
@@ -60,47 +60,122 @@ def store_user(name, email, collection=None, timezone=0):
 	result = collection.insert_one({
 		'name': name,
 		'email': email,
-		'created_at':  datetime.datetime.utcnow(),
-		'last_updated': datetime.datetime.utcnow(),
+		'created_at': datetime.datetime.utcnow(),
+		'last_modified': datetime.datetime.utcnow(),
 		'timezone': timezone,
 		'first_name': name.partition(' ')[0] # get the first part of the name until a space (or whole thing if no space)
 		})
-	return result.inserted_id
+	return result 
 
 	
-def init_trials(user_id, experiment_id, ):
-	""" Initialises all the trials for an experiment for a user, reading a document in the 'experiments' database and populating the 'trials' database with trials
-	This assumes that the experiment already exists in the database, and simply reads out the experiments and makes sure all reminders are set, timezones are corrected,
+def init_trials(user_id, experiment_id):
+	""" Initialises all the trials for an experiment for a user, reading a document in the 'experiments' database and populating the 'trials' collection
+	This assumes that the experiment already exists in the database, and simply reads out the experiments and makes sure all reminders are set, timezones are corrected for,
 	and order of conditions is randomised
 	"""
-
+	# get a handle to the users collection and experiments collection
+	client, db_handle, users_coll = open_connection(collectionName='users')
+	experiments_coll = db_handle['experiments']
+	# get information about the user and store it into variable using next()
+	user = users_coll.find({"_id": user_id}).next()
+	# get information about the experiment and store it into the variable using next()
+	exp = experiments_coll.find({"_id": experiment_id}).next()
+	# create an array of all the condition strings
+	condition_array = []
+	for con, ix in exp.conditions: # iterate over each condition in the experiment
+		# append the condition with appropriate number of replications
+		condition_array += ([con] * exp.nTrials[ix])
+	# do not re-seed the RNG but check it's not the same number coming out every time (in which case, seed with os.urandom)
+	print('numpy-generated random number: %.10f' % np.random.random())
+	# shuffle the array depending on requested method, either 1000 times or until satisfied. Wouldn't want to crash the server
+	satisfied = False
+	iterations = 0
+	while (not satisfied) and (iterations<1000):
+		# increase iterations 
+		iterations += 1
+		# select randomisation method
+		if exp.randomise == 'complete':
+			# completely random, no restraints on ordering
+			np.random.shuffle(condition_array)
+			satisfied = True
+		elif exp.randomise == 'max3':	
+			# shuffle in some way that maximally 3 times in a row the same condition is given
+			random.shuffle(condition_array)
+			# check if restraint is satisfied
+			# https://stackoverflow.com/questions/29081226/limit-the-number-of-repeats-in-pseudo-random-python-list
+			if all(len(list(group)) <= 3 for _, group in groupby(condition_array)):
+				satisfied = True
 	
+	# get the first condition email and response request. We can then just add 24 hours to each of these
+	first_condition = 
+		# first define the date and time in UTC
+		datetime.combine(
+			datetime.date.today() + datetime.timedelta(days=1), # tomorrow's date
+			datetime.time(hour=exp.condition_prompt) # the time of day to send the prompt
+		) +
+		# then add a delta based on the timezone
+		datetime.timedelta(hours=user.timezone)
+	first_response = 
+		# first define the date and time in UTC
+		datetime.combine(
+			datetime.date.today() + datetime.timedelta(days=1), # tomorrow's date
+			datetime.time(hour=exp.response_prompt) # the time of day to send the prompt
+		) +
+		# then add a delta based on the timezone
+		datetime.timedelta(hours=user.timezone)
+
+	# insert each trial into database
+	for condition, ix in condition_array:
+		db_handle['trials'].insert_one({
+			'user_id': user_id,
+			'experiment_id': experiment_id,
+			'trial_number': ix,
+			'condition': condition,
+			'instruction_sent': False,
+			'response_request_sent': False,
+			'response_given': False,
+			'condition_date': first_condition + datetime.timedelta(hours=ix * exp.ITI), # add one day for each next trial
+			'response_date': first_response + datetime.timedelta(hours=ix * exp.ITI), # ditto
+			'created_at': datetime.datetime.utcnow(),
+			'last_modified': datetime.datetime.utcnow(),
+		})
+		
+		
+def init_results(user_id, experiment_id):
+	""" initialise the results document for a user's experiment
+	"""
+	client, db_handle, results_coll = open_connection(collectionName='results')
+	insert_result results_coll.insert_one({
+		'user_id': user_id,
+		'experiment_id': experiment_id,
+		'created_at': datetime.datetime.utcnow(),
+		'last_modified': datetime.datetime.utcnow(),
+	})
+	return insert_result
+
 		
 def init_experiment_meditation():
 	""" temporary code to initialise the meditation experiment in the database. Helpful to identify what variables to store and how to name them
+	Returns an instance of pymongo InsertOneResult, e.g. insert_result.inserted_id to get the ID of inserted document
 	
 	"""
 	# open a new connection
 	client, db, collection = open_connection()
 	# set the experiments collection
 	collection = db['experiments']
-	# fill with single experiment, replacing if duplicate name exists FOR DEBUGGING PURPOSES (otherwise you get tons of entries for meditation)
-	# and inserting if it doesn't exist yet.
-	collection.update_one({'name': 'meditation'}, {
-		"$set": {
-			'name': 'meditation',
-			'conditions': ["meditate", "do not meditate"],
-			'dependent_vars': ["happiness"],
-			'nTrials': np.array([10, 10]),
-			'condition_prompt': datetime.time(7), #time of day (first arg is hour of day, 0 to 24
-			'response_prompt': datetime.time(15), #time of day
-			'randomise': 'max3' #as example for now; indicates max 3 times the same condition in a row
-		},
-		# set last_modified to the current date
-		"$currentDate": 
-			{"last_modified": True}
-		# set upsert to insert the document if no document is found to update.
-		}, upsert=True)
+	# fill with single experiment. Does not check for unique name 
+	insert_result = collection.insert_one({
+		'name': 'meditation',
+		'conditions': ["meditate", "do not meditate"],
+		'dependent_vars': ["happiness"],
+		'nTrials': [10, 10],
+		'condition_prompt': 7, #time of day in hours between 0 and 24
+		'response_prompt': 15, #time of day in hours between 0 and 24
+		'ITI': 24, # set the ITI between trials in hours
+		'randomise': 'complete', #how to randomise; see init_trials() for implementation
+		'created_at': datetime.datetime.utcnow(),
+		'last_modified': datetime.datetime.utcnow(),
+	})
 	
-	
+	return insert_result
 	
