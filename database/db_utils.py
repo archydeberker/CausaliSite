@@ -12,7 +12,7 @@ URI = os.getenv('MONGO_URI', 'mongodb://localhost')
 # function definitions that can be used by other scripts
 def open_connection(URI=URI, db='zapscience', collectionName='users'):
 	""" Opens connection and returns connection details
-	Input:
+	Inputs
 		URI 			server to connect to (includes credentials)
 		db 				database to connect to
 		collectionName	what collection to set up
@@ -38,6 +38,7 @@ def close_connection(client):
 
 def store_user(name, email, collection=None, timezone=0):
 	""" Store user info in a collection.
+
 	As I understand it you don't have to sanitise inputs in MongoDB unless you're concatenating strings.
 	Instead of using the has we can use the objectID in the mongoDB database, which is unique. 
 	HOWEVER, IT MIGHT BE EASY TO PREDICT WHAT OTHER OBJECT IDS LOOK LIKE BASED ON YOUR OWN, so
@@ -53,7 +54,7 @@ def store_user(name, email, collection=None, timezone=0):
 	"""
 	# get default collection if none is provided
 	if not collection:
-		client, db, collection = open_connection()
+		client, db, collection = open_connection(collectionName='users')
 	# write the user info to the database
 	result = collection.insert_one({
 		'name': name,
@@ -79,16 +80,14 @@ def init_trials(user_id, experiment_id):
 	client, db_handle, users_coll = open_connection(collectionName='users')
 	experiments_coll = db_handle['experiments']
 	# get information about the user and store it into variable using next()
-	user = list(users_coll.find({"_id": ObjectId(user_id)}))[0]
+	user = users_coll.find_one({"_id": ObjectId(user_id)})
 	# get information about the experiment and store it into the variable using next()
-	exp = list(experiments_coll.find({"_id": ObjectId(experiment_id)}))[0]
+	exp = experiments_coll.find_one({"_id": ObjectId(experiment_id)})
 	# create an array of all the condition strings
 	condition_array = []
 	for ix, con in enumerate(exp["conditions"]): # iterate over each condition in the experiment
 		# append the condition with appropriate number of replications
 		condition_array += ([con] * exp["nTrials"][ix])
-	# do not re-seed the RNG but check it's not the same number coming out every time (in which case, seed with os.urandom)
-	print('numpy-generated random number: %.10f' % np.random.random())
 	# shuffle the array depending on requested method, either 1000 times or until satisfied. Wouldn't want to crash the server
 	satisfied = False
 	iterations = 0
@@ -113,14 +112,14 @@ def init_trials(user_id, experiment_id):
 	# get the first condition email and response request. We can then just add 24 hours to each of these
 	first_instruction_datetime = datetime.datetime.combine(  # first define the date and time in UTC
 			datetime.date.today() + datetime.timedelta(days=1), # tomorrow's date
-			datetime.time(hour=exp["condition_prompt"]) # the time of day to send the prompt
+			datetime.time(hour=exp["instruction_prompt"]) # the time of day to send the prompt
 		) + datetime.timedelta(hours=user["timezone"]) # then add a delta based on the timezone
 	first_response_datetime = datetime.datetime.combine( # first define the date and time in UTC
 			datetime.date.today() + datetime.timedelta(days=1), # tomorrow's date
 			datetime.time(hour=exp["response_prompt"]) # the time of day to send the prompt
 		) + datetime.timedelta(hours=user["timezone"]) # then add a delta based on the timezone
 
-	# insert each trial into database
+	# insert each trial into database.
 	for ix, condition in enumerate(condition_array):
 		db_handle['trials'].insert_one({
 			'user_id': user_id,
@@ -130,15 +129,23 @@ def init_trials(user_id, experiment_id):
 			'instruction_sent': False,
 			'response_request_sent': False,
 			'response_given': False,
-			'condition_date': first_instruction_datetime + datetime.timedelta(hours=ix * exp["ITI"]), # add one day for each next trial
+			'instruction_date': first_instruction_datetime + datetime.timedelta(hours=ix * exp["ITI"]), # add one day for each next trial
 			'response_date': first_response_datetime + datetime.timedelta(hours=ix * exp["ITI"]), # ditto
 			'created_at': datetime.datetime.utcnow(),
 			'last_modified': datetime.datetime.utcnow(),
+			'random_number': np.random.random()
 		})
 		
 		
 def init_results(user_id, experiment_id):
 	""" initialise the results document for a user's experiment
+
+	Inputs
+		user_id			string, should match an _id in users collection
+		experiment_id 	string, should match an _id in experiments collection
+
+	Returns
+		insert_result 	see insert_result.inserted_id for _id of inserted document
 	"""
 	client, db_handle, results_coll = open_connection(collectionName='results')
 	insert_result = results_coll.insert_one({
@@ -152,26 +159,61 @@ def init_results(user_id, experiment_id):
 		
 def init_experiment_meditation():
 	""" temporary code to initialise the meditation experiment in the database. Helpful to identify what variables to store and how to name them
-	Returns an instance of pymongo InsertOneResult, e.g. insert_result.inserted_id to get the ID of inserted document
 	
+	Returns an instance of pymongo InsertOneResult, e.g. insert_result.inserted_id 
+	to get the ID of inserted document
 	"""
 	# open a new connection
-	client, db, collection = open_connection()
-	# set the experiments collection
-	collection = db['experiments']
+	client, db, collection = open_connection(collectionName='experiments')
 	# fill with single experiment. Does not check for unique name 
 	insert_result = collection.insert_one({
 		'name': 'meditation',
 		'conditions': ["meditate", "do not meditate"],
 		'dependent_vars': ["happiness"],
 		'nTrials': [10, 10],
-		'condition_prompt': 7, #time of day in hours between 0 and 24
+		'instruction_prompt': 7, #time of day in hours between 0 and 24
 		'response_prompt': 15, #time of day in hours between 0 and 24
 		'ITI': 24, # set the ITI between trials in hours
 		'randomise': 'complete', #how to randomise; see init_trials() for implementation
 		'created_at': datetime.datetime.utcnow(),
 		'last_modified': datetime.datetime.utcnow(),
 	})
-	
 	return insert_result
 	
+def get_uncompleted_instructions(include_past=True, include_future=False, sort='chronological', limit=0):
+	""" Looks at 'trials' database and return a list of uncompleted instructions 
+
+	This should be useful e.g. for a CRON job to check if anything needs to be sent.
+
+	Inputs
+		include_past 		if True, includes uncompleted events in the past (before current time)
+		include_future 		if True, includes uncompleted events in the future
+		sort				how to sort the resulting list, should be 'chronological' or anything else for anti-chronological
+		limit 				integer, maximum number of documents to return
+
+	Returns
+		instructions 		sorted list of dictionaries representing instructions
+	"""
+	# get current datetime in format that mongodb understands
+	right_now = datetime.datetime.utcnow()
+	if include_past and include_future:
+		datesearch = {}
+	elif include_past and not include_future:
+		datesearch = {'instruction_date': {"$lte": right_now}}
+	elif not include_past and include_future:
+		datesearch = {'instruction_date': {"$gte": right_now}}
+	elif not include_past and not include_future: # this is retarded of course
+		datesearch = {'instruction_date': right_now}
+	# update original query with additional constraints on what documents to return
+	instruction_query = {'instruction_sent': False}
+	instruction_query.update(datesearch)
+	# set sort
+	if sort == 'chronological':
+		sort_as = pymongo.ASCENDING
+	else:
+		sort_as = pymongo.DESCENDING
+
+	# get connection to database
+	client, db, collection = open_connection(collectionName='trials')
+	# execute query and return as list of dicts
+	return list(collection.find(instruction_query).sort('instruction_date', sort_as).limit(limit))
