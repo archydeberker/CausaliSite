@@ -3,13 +3,11 @@ import pymongo
 import sys
 import os
 import datetime
+from bson.objectid import ObjectId # to be able to query _id in mongo
+import numpy as np
 
-# find the database URI. If not available in the environment, assume running locally
-try: # will fail if no MONGO_URI in environment
-	URI = os.environ['MONGO_URI']
-except NameError:
-	print('no environment mongoDB URI found, using local server')
-	URI = 'mongodb://localhost'
+# find the database URI. If not available in the environment, use local mongodb host
+URI = os.getenv('MONGO_URI', 'mongodb://localhost')
 
 # function definitions that can be used by other scripts
 def open_connection(URI=URI, db='zapscience', collectionName='users'):
@@ -69,22 +67,26 @@ def store_user(name, email, collection=None, timezone=0):
 
 	
 def init_trials(user_id, experiment_id):
-	""" Initialises all the trials for an experiment for a user, reading a document in the 'experiments' database and populating the 'trials' collection
+	""" Initialises all the trials for an experiment for a user, reading a document in the 'experiments' database and populating the 'trials' collection.
+
 	This assumes that the experiment already exists in the database, and simply reads out the experiments and makes sure all reminders are set, timezones are corrected for,
 	and order of conditions is randomised
+	Inputs
+		user_id 		string, not an ObjectId
+		experiment_id 	string, not an ObjectId
 	"""
 	# get a handle to the users collection and experiments collection
 	client, db_handle, users_coll = open_connection(collectionName='users')
 	experiments_coll = db_handle['experiments']
 	# get information about the user and store it into variable using next()
-	user = users_coll.find({"_id": user_id}).next()
+	user = list(users_coll.find({"_id": ObjectId(user_id)}))[0]
 	# get information about the experiment and store it into the variable using next()
-	exp = experiments_coll.find({"_id": experiment_id}).next()
+	exp = list(experiments_coll.find({"_id": ObjectId(experiment_id)}))[0]
 	# create an array of all the condition strings
 	condition_array = []
-	for con, ix in exp.conditions: # iterate over each condition in the experiment
+	for ix, con in enumerate(exp["conditions"]): # iterate over each condition in the experiment
 		# append the condition with appropriate number of replications
-		condition_array += ([con] * exp.nTrials[ix])
+		condition_array += ([con] * exp["nTrials"][ix])
 	# do not re-seed the RNG but check it's not the same number coming out every time (in which case, seed with os.urandom)
 	print('numpy-generated random number: %.10f' % np.random.random())
 	# shuffle the array depending on requested method, either 1000 times or until satisfied. Wouldn't want to crash the server
@@ -94,38 +96,32 @@ def init_trials(user_id, experiment_id):
 		# increase iterations 
 		iterations += 1
 		# select randomisation method
-		if exp.randomise == 'complete':
+		if exp["randomise"] == 'complete':
 			# completely random, no restraints on ordering
 			np.random.shuffle(condition_array)
 			satisfied = True
-		elif exp.randomise == 'max3':	
+		elif exp["randomise"] == 'max3':	
 			# shuffle in some way that maximally 3 times in a row the same condition is given
 			random.shuffle(condition_array)
 			# check if restraint is satisfied
 			# https://stackoverflow.com/questions/29081226/limit-the-number-of-repeats-in-pseudo-random-python-list
 			if all(len(list(group)) <= 3 for _, group in groupby(condition_array)):
 				satisfied = True
+	if not satisfied:
+		print('did not reach criterion for randomising; using current state of condition_array instead')
 	
 	# get the first condition email and response request. We can then just add 24 hours to each of these
-	first_condition = 
-		# first define the date and time in UTC
-		datetime.combine(
+	first_instruction_datetime = datetime.datetime.combine(  # first define the date and time in UTC
 			datetime.date.today() + datetime.timedelta(days=1), # tomorrow's date
-			datetime.time(hour=exp.condition_prompt) # the time of day to send the prompt
-		) +
-		# then add a delta based on the timezone
-		datetime.timedelta(hours=user.timezone)
-	first_response = 
-		# first define the date and time in UTC
-		datetime.combine(
+			datetime.time(hour=exp["condition_prompt"]) # the time of day to send the prompt
+		) + datetime.timedelta(hours=user["timezone"]) # then add a delta based on the timezone
+	first_response_datetime = datetime.datetime.combine( # first define the date and time in UTC
 			datetime.date.today() + datetime.timedelta(days=1), # tomorrow's date
-			datetime.time(hour=exp.response_prompt) # the time of day to send the prompt
-		) +
-		# then add a delta based on the timezone
-		datetime.timedelta(hours=user.timezone)
+			datetime.time(hour=exp["response_prompt"]) # the time of day to send the prompt
+		) + datetime.timedelta(hours=user["timezone"]) # then add a delta based on the timezone
 
 	# insert each trial into database
-	for condition, ix in condition_array:
+	for ix, condition in enumerate(condition_array):
 		db_handle['trials'].insert_one({
 			'user_id': user_id,
 			'experiment_id': experiment_id,
@@ -134,8 +130,8 @@ def init_trials(user_id, experiment_id):
 			'instruction_sent': False,
 			'response_request_sent': False,
 			'response_given': False,
-			'condition_date': first_condition + datetime.timedelta(hours=ix * exp.ITI), # add one day for each next trial
-			'response_date': first_response + datetime.timedelta(hours=ix * exp.ITI), # ditto
+			'condition_date': first_instruction_datetime + datetime.timedelta(hours=ix * exp["ITI"]), # add one day for each next trial
+			'response_date': first_response_datetime + datetime.timedelta(hours=ix * exp["ITI"]), # ditto
 			'created_at': datetime.datetime.utcnow(),
 			'last_modified': datetime.datetime.utcnow(),
 		})
@@ -145,7 +141,7 @@ def init_results(user_id, experiment_id):
 	""" initialise the results document for a user's experiment
 	"""
 	client, db_handle, results_coll = open_connection(collectionName='results')
-	insert_result results_coll.insert_one({
+	insert_result = results_coll.insert_one({
 		'user_id': user_id,
 		'experiment_id': experiment_id,
 		'created_at': datetime.datetime.utcnow(),
