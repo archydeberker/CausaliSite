@@ -6,6 +6,7 @@ import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
 
+
 # find the database URI. If not available in the environment, use local mongodb host
 URI = os.getenv('MONGO_URI', 'mongodb://localhost')
 
@@ -36,7 +37,7 @@ def close_connection(client):
 	client.close()
 
 
-def store_user(name, email, collection=None, timezone=0):
+def store_user(name, email, timezone=0):
 	""" Store user info in a collection.
 
 	As I understand it you don't have to sanitise inputs in MongoDB unless you're concatenating strings.
@@ -52,9 +53,8 @@ def store_user(name, email, collection=None, timezone=0):
 	Returns:
 		result 		contains unique id of user as insert_results.inserted_id
 	"""
-	# get default collection if none is provided
-	if not collection:
-		client, db, collection = open_connection(collectionName='users')
+	
+	client, db, collection = open_connection(collectionName='users')
 	# write the user info to the database
 	result = collection.insert_one({
 		'name': name,
@@ -180,6 +180,7 @@ def init_experiment_meditation():
 	})
 	return insert_result
 	
+
 def get_uncompleted_instructions(include_past=True, include_future=False, sort='chronological', limit=0):
 	""" Looks at 'trials' database and return a list of uncompleted instructions 
 
