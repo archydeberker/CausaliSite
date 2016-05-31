@@ -13,7 +13,7 @@ message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
                  subject = "Email job",
                  sender = "a@deberker.com",
                  to = "a@deberker.com",
-                 text_body = "Sent at " + datetime.datetime.strftime(datetime.datetime.utcnow(), '%Y-%m-%d %H:%M:%S') + ". Today you " + choiceStr[meditate] + "meditate!" ,
+                 text_body = "Sent at " + datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S') + ". Today you " + choiceStr[meditate] + "meditate!" ,
                  tag = "hello")
 
 settings.configure()
@@ -24,6 +24,6 @@ import pymongo
 uri = os.environ['MONGO_URI']
 client = pymongo.MongoClient(uri)
 usersCol = client['zapscience'].users
-usersCol.insert({'name': "archy", 'email': "a@deberker.com",'meditate_today': meditate})
+usersCol.insert({'name': "archy", 'email': "a@deberker.com",'meditate_today':meditate})
 client.close()
 

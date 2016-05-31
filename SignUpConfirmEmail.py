@@ -1,3 +1,6 @@
+# This sends an email to a newly signed up User, confirming their signup and adding them to the database.
+# This supercedes the template archyEmail.py
+
 import os
 import sys
 import logging
@@ -9,10 +12,10 @@ import database.db_utils as db_utils
 message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
 	#,'4322111a-0d75-4777-8111-2d83f0664762'
                  subject = "first part of concatenated string " + sys.argv[2],
-                 sender = "a@deberker.com",
-                 to = "a@deberker.com",
-                 text_body = sys.argv[1],
-                 tag = "hello")
+                 sender = "zapscience@gmail.com",
+                 to = sys.argv[1],
+                 text_body = "Thanks for signing up for your first experiment. We'll send you your first trial tomorrow!"
+                 tag = "welcome")
 
 settings.configure()
 
