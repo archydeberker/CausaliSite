@@ -1,19 +1,13 @@
 <html>
 <body>
 
-Welcome <?php echo $_POST["name"]; ?><br>
-Your email address is: <?php echo $_POST["email"]; ?>
+Your trial hash: <?php echo $_GET["trialhash"]; ?><br>
+Your rating: <?php echo $_GET["rating"]; ?>
 
-<?php
-// The message
-$message = "Line 1\r\nLine 2\r\nLine 3";
-
-// In case any of our lines are larger than 70 characters, we should use wordwrap()
-$message = wordwrap($message, 70, "\r\n");
 
 // Send
-$temp1 = $_POST["name"];
-$temp2 = $_POST["email"];
+$temp1 = $_GET["trialhash"];
+$temp2 = $_GET["rating"];
 exec("python archyEmail.py $temp1 $temp2");
 ?>
 
