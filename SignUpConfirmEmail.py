@@ -16,7 +16,7 @@ message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
                  subject = "Welcome to Causali!" ,
                  sender = "a@deberker.com",
                  to = sys.argv[2],
-                 text_body = "Hey " + sys.argv[1] + " Thanks for signing up for your first experiment. <br> We'll send you your first trial tomorrow!",
+                 HtmlBody = "Hey " + sys.argv[1] + " Thanks for signing up for your first experiment. <br> We'll send you your first trial tomorrow!",
                  tag = "welcome")
 
 settings.configure()
