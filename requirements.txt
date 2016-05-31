@@ -3,3 +3,4 @@ python-postmark>=0.4.3
 pymongo
 datetime
 pytz
+numpy
