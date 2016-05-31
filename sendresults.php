@@ -6,6 +6,7 @@ Your rating: <?php echo $_GET["rating"]; ?>
 
 
 // Send
+<?php
 $temp1 = $_GET["trialhash"];
 $temp2 = $_GET["rating"];
 exec("python archyEmail.py $temp1 $temp2");
