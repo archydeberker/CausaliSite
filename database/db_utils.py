@@ -6,7 +6,9 @@ import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
 import hashlib
-print("done importing packages in db_utils.py")
+
+
+
 
 
 # find the database URI. If not available in the environment, use local mongodb host
@@ -135,7 +137,8 @@ def init_trials(user_id, experiment_id):
 			'response_date': first_response_datetime + datetime.timedelta(hours=ix * exp["ITI"]), # ditto
 			'created_at': datetime.datetime.utcnow(),
 			'last_modified': datetime.datetime.utcnow(),
-			'random_number': np.random.random()
+			'random_number': np.random.random(),
+			'hash_sha256': hashlib.sha256(user_id+experiment_id+str(ix)+str(np.random.random())).hexdigest() # add a random hash, because if you don't add the np.random.random() then the same user doing experiment twice will go messed up
 		})
 		
 		
@@ -222,10 +225,78 @@ def get_uncompleted_instructions(include_past=True, include_future=False, sort='
 	return list(collection.find(instruction_query).sort('instruction_date', sort_as).limit(limit))
 
 
+def get_uncompleted_response_prompts(include_past=True, include_future=False, sort='chronological', limit=0):
+	""" Looks at 'trials' database and return a list of uncompleted response prompts 
+
+	This should be useful e.g. for a CRON job to check if anything needs to be sent.
+
+	Inputs
+		include_past 		if True, includes uncompleted events in the past (before current time)
+		include_future 		if True, includes uncompleted events in the future
+		sort				how to sort the resulting list, should be 'chronological' or anything else for anti-chronological
+		limit 				integer, maximum number of documents to return
+
+	Returns
+		instructions 		sorted list of dictionaries representing response prompts
+	"""
+	# get current datetime in format that mongodb understands
+	right_now = datetime.datetime.utcnow()
+	if include_past and include_future:
+		datesearch = {}
+	elif include_past and not include_future:
+		datesearch = {'response_date': {"$lte": right_now}}
+	elif not include_past and include_future:
+		datesearch = {'response_date': {"$gte": right_now}}
+	elif not include_past and not include_future: # this is retarded of course
+		datesearch = {'response_date': right_now}
+	# update original query with additional constraints on what documents to return
+	response_query = {'response_request_sent': False}
+	response_query.update(datesearch)
+	# set sort
+	if sort == 'chronological':
+		sort_as = pymongo.ASCENDING
+	else:
+		sort_as = pymongo.DESCENDING
+
+	# get connection to database
+	client, db, collection = open_connection(collectionName='trials')
+	# execute query and return as list of dicts
+	return list(collection.find(response_query).sort('response_date', sort_as).limit(limit))
 
 
+def store_response(hash, response, dependent_var_ix=0):
+	"""Stores a trial response and sets the flags to indicate response is received.
+
+	Inputs
+		hash 				should match a hash_sha256 in the 'trials' collection
+		response 			a response in the format of the dependent variable of the experiment
+		dependent_var_ix	the index of the dependent variable
+	"""
+	# open connection to trials database
+	client, db_handle, trials_coll = open_connection(collectionName='trials')
+	# check the has is in the database
+	doc = trials_coll.find_one({"hash_256": hash})
+	if not doc: # if doc cannot be found
+		print("could not find the document with hash %s" % hash)
+		return None
+	# 
 
 
+def send_outstanding_response_prompts():
+	"""Uses get_uncompleted_response_prompts() to get to-do list, then sends emails.
+
+	"""
+	outstanding = get_uncompleted_response_prompts(include_past=True, include_future=False)
+	if not outstanding: # if list is empty
+		print("no outstanding response prompts")
+		return None
+
+	client, db_handle, users_coll = open_connection(collectionName='users')
+	# at this stage there are outstanding response prompts
+	for prompt in outstanding:
+		# get the user
+		user = users_coll.find_one({"_id": prompt['user_id']})
+		EMAILSCRIPT(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
 
 # References
 ## Bulk operations in mongoDB: http://stackoverflow.com/a/36213728
