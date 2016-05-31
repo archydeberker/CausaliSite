@@ -5,7 +5,7 @@
 	# Email
 	# Hash for that trial
 
-def ProbeEmail(userEmail,trialHash)
+def ProbeEmail(userName,userEmail,trialHash)
 
 	import os
 	import sys
@@ -27,11 +27,11 @@ def ProbeEmail(userEmail,trialHash)
 
 	message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
 		#,'4322111a-0d75-4777-8111-2d83f0664762'
-	                 subject = "Welcome to Causali!" ,
+	                 subject = userName + ", how are you feeling?" ,
 	                 sender = "a@deberker.com",
 	                 to = userEmail,
 	                 html_body = bodyText,
-	                 tag = "welcome")
+	                 tag = "response")
 
 	settings.configure()
 
