@@ -4,6 +4,7 @@ import sys
 import logging
 from django.conf import settings
 import database.db_utils as db_utils
+import pymongo
 
 # these variables are passed in
 trialHash 	= sys.argv[1]
