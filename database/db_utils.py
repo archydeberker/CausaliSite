@@ -217,3 +217,9 @@ def get_uncompleted_instructions(include_past=True, include_future=False, sort='
 	client, db, collection = open_connection(collectionName='trials')
 	# execute query and return as list of dicts
 	return list(collection.find(instruction_query).sort('instruction_date', sort_as).limit(limit))
+
+
+
+
+# References
+## Bulk operations in mongoDB: http://stackoverflow.com/a/36213728
