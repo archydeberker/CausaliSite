@@ -6,8 +6,8 @@ from django.conf import settings
 import database.db_utils as db_utils
 
 # these variables are passed in
-trialHash 	= sys.env[1]
-trialRating = sys.env[2]
+trialHash 	= sys.argv[1]
+trialRating = sys.argv[2]
 
 # setup connection to the database
 uri 		= os.environ['MONGO_URI']
