@@ -14,7 +14,7 @@ message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
                  subject = "first part of concatenated string " + sys.argv[2],
                  sender = "zapscience@gmail.com",
                  to = sys.argv[1],
-                 text_body = "Thanks for signing up for your first experiment. We'll send you your first trial tomorrow!"
+                 text_body = "Thanks for signing up for your first experiment. We'll send you your first trial tomorrow!",
                  tag = "welcome")
 
 settings.configure()
