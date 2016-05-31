@@ -8,6 +8,8 @@ from postmark import PMMail
 from django.conf import settings
 import database.db_utils as db_utils
 
+print sys.argv[1]
+print sys.argv[2]
 
 message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
 	#,'4322111a-0d75-4777-8111-2d83f0664762'
