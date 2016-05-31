@@ -6,6 +6,7 @@ import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
 import hashlib
+print("done importing packages in db_utils.py")
 
 
 # find the database URI. If not available in the environment, use local mongodb host
