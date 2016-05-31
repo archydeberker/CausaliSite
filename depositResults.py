@@ -16,10 +16,10 @@ uri 		= os.environ['MONGO_URI']
 client 		= pymongo.MongoClient(uri)
 usersCol 	= client['zapscience'].trials
 
-trialID 	= "574dfa79dee0ae00032ad982"
-
+# use Hash tag
+trialID 	= "803faa43b47173aee6c0a38b2f5eabdd7121ea0edc9d1c2ab902c56ce5995a57"
 
 # now update the relevant entry
-usersCol.update_one({'_id': ObjectId(trialID)}, {'$set': {'response_given': True, 'trialRating': trialRating}, "$currentDate": {'last_modified': True}})
+usersCol.update_one({'hash_sha256': trialID}, {'$set': {'response_given': True, 'trialRating': trialRating}, "$currentDate": {'last_modified': True}})
 
 client.close()
