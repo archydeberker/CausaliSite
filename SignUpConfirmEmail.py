@@ -21,6 +21,7 @@ message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
 
 settings.configure()
 
+
 message.send()
 
 # write to database
