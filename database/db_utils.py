@@ -6,6 +6,7 @@ import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
 import hashlib
+import ProbeEmail
 
 
 
@@ -296,7 +297,7 @@ def send_outstanding_response_prompts():
 	for prompt in outstanding:
 		# get the user
 		user = users_coll.find_one({"_id": prompt['user_id']})
-		EMAILSCRIPT(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
+		ProbeEmail.ProbeEmail(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
 
 # References
 ## Bulk operations in mongoDB: http://stackoverflow.com/a/36213728
