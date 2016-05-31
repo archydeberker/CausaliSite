@@ -11,15 +11,17 @@ import database.db_utils as db_utils
 print sys.argv[1]
 print sys.argv[2]
 
+P
 message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
 	#,'4322111a-0d75-4777-8111-2d83f0664762'
                  subject = "Welcome to Causali!" ,
-                 sender = "zapscience@gmail.com",
+                 sender = "a@deberker.com",
                  to = sys.argv[2],
-                 text_body = "Hey " + sys.argv[1] + " Thanks for signing up for your first experiment. We'll send you your first trial tomorrow!",
+                 html_body = "Hey " + sys.argv[1] + " Thanks for signing up for your first experiment. <br> We'll send you your first trial tomorrow!",
                  tag = "welcome")
 
 settings.configure()
+
 
 message.send()
 
