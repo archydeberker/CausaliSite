@@ -5,6 +5,7 @@ import os
 import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
+import hashlib
 
 
 # find the database URI. If not available in the environment, use local mongodb host
@@ -218,6 +219,9 @@ def get_uncompleted_instructions(include_past=True, include_future=False, sort='
 	client, db, collection = open_connection(collectionName='trials')
 	# execute query and return as list of dicts
 	return list(collection.find(instruction_query).sort('instruction_date', sort_as).limit(limit))
+
+
+
 
 
 
