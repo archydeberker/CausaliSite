@@ -5,8 +5,8 @@ Your trial hash: <?php echo $_GET["trialhash"]; ?><br>
 Your rating: <?php echo $_GET["rating"]; ?>
 
 
-// Send
 <?php
+// Send
 $temp1 = $_GET["trialhash"];
 $temp2 = $_GET["rating"];
 exec("python archyEmail.py $temp1 $temp2");
