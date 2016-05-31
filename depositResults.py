@@ -19,6 +19,6 @@ trialID 	= "574dfa79dee0ae00032ad982"
 
 
 # now update the relevant entry
-usersCol.update({'_id': trialID, 'response_given': True, 'trialRating':trialRating})
+usersCol.update_one({'_id': trialID}, {'$set': {'response_given': True, 'trialRating': trialRating}, "$currentDate": {'last_modified': True}})
 
 client.close()
