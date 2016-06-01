@@ -1,0 +1,5 @@
+pymongo
+python-postmark>=0.4.3
+datetime
+pytz
+numpy
