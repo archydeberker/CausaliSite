@@ -265,22 +265,30 @@ def get_uncompleted_response_prompts(include_past=True, include_future=False, so
 	return list(collection.find(response_query).sort('response_date', sort_as).limit(limit))
 
 
-def store_response(hash, response, dependent_var_ix=0):
+def store_response(trial_hash, response):
 	"""Stores a trial response and sets the flags to indicate response is received.
 
 	Inputs
-		hash 				should match a hash_sha256 in the 'trials' collection
+		trial_hash			should match a hash_sha256 in the 'trials' collection
 		response 			a response in the format of the dependent variable of the experiment
-		dependent_var_ix	the index of the dependent variable
 	"""
 	# open connection to trials database
 	client, db_handle, trials_coll = open_connection(collectionName='trials')
 	# check the has is in the database
-	doc = trials_coll.find_one({"hash_256": hash})
+	doc = trials_coll.find_one({"hash_256": trial_hash})
 	if not doc: # if doc cannot be found
-		print("could not find the document with hash %s" % hash)
+		print("could not find the document with hash %s" % trial_hash)
 		return None
-	# 
+	# deposit result
+	trials_coll.update_one({"hash_256": trial_hash}, {
+		'$set': {
+			'response_given': True,
+			'trialRating': response
+		},
+		"$currentDate": {
+			'last_modified': True
+		}
+	})
 
 
 def send_outstanding_response_prompts():

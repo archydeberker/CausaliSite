@@ -1,18 +1,15 @@
-# This sends a probe email to a specified user using a trial hash
-
-# Inputs:
-	# Name
-	# Email
-	# Hash for that trial
+import os
+from postmark import PMMail
+from django.conf import settings
 
 def ProbeEmail(userName,userEmail,trialHash)
+	"""sends a probe email to a specified user using a trial hash.
 
-	import os
-	import sys
-	import logging
-	from postmark import PMMail
-	from django.conf import settings
-	import database.db_utils as db_utils
+	Inputs
+		Name
+		Email
+		Hash for that trial
+	"""
 
 	mostofpath= """<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=""" + trialHash + "&rating="
 	restofpath= """><img src="https://zapscience.herokuapp.com/star.png"></a>"""
@@ -34,6 +31,4 @@ def ProbeEmail(userName,userEmail,trialHash)
 	                 tag = "response")
 
 	settings.configure()
-
-
 	message.send()
