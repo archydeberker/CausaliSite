@@ -301,11 +301,78 @@ def send_outstanding_response_prompts():
 		return None
 
 	client, db_handle, users_coll = open_connection(collectionName='users')
+	trials_coll = db_handle["trials"]
 	# at this stage there are outstanding response prompts
 	for prompt in outstanding:
 		# get the user
 		user = users_coll.find_one({"_id": prompt['user_id']})
-		ProbeEmail.ProbeEmail(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
+		result = ProbeEmail.ProbeEmail(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
+		# TO DO check that result is correct and only continue if correct
+		#################
+
+		# store that instruction is sent, set the time instruction was sent, and update last_modified
+		trials_coll.update_one({"_id": prompt["_id"]}, {
+			"$set": {
+				"response_request_sent": True
+			}, 
+			"$currentDate": {
+				"response_request_sent_date": True, 
+				"last_modified": True
+			}
+		})
+
+
+def send_outstanding_instructions():
+	"""Uses get_uncompleted_response_prompts() to get to-do list, then sends emails.
+
+	"""
+	outstanding = get_uncompleted_instructions(include_past=True, include_future=False)
+	if not outstanding: # if list is empty
+		print("no outstanding instructions")
+		return None
+
+	client, db_handle, users_coll = open_connection(collectionName='users')
+	trials_coll = db_handle["trials"]
+	# at this stage there are outstanding response prompts
+	for prompt in outstanding:
+		# get the user
+		user = users_coll.find_one({"_id": prompt['user_id']})
+		INSTRUCTION_EMAIL_FUNCTION_DOES_NOT_EXIST_YET(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
+		# store in the trials collection that the instruction has been sent and exact datetime
+		trials_coll.update_one({"_id": prompt["_id"]}, {
+			"$set": {
+				"instruction_sent": True
+			}, 
+			"$currentDate": {
+				"instruction_sent_date": True, 
+				"last_modified": True
+			}
+		})
+
+
+def trials_completed(filter={}):
+	"""Returns number of completed trials for a particular filter.
+
+	Queries the trials collection and looks for completed trials.
+	Input
+		filter 			passed to mongodb .find. Could e.g. filter by a particular experiment or user
+
+	Returns
+		integer with number of completed trials
+
+	"""
+	client, db_handle, trials_collection = open_connection(collectionName='trials')
+	# construct the query for completed trials
+	query = {
+		'instruction_sent': True,
+		'response_request_sent': True, 
+		'response_given': True
+		}
+	# apply the filter
+	query.update(filter)
+	# search and return the number of retrieved docs
+	return trials_collection.find(query).count()
+
 
 # References
 ## Bulk operations in mongoDB: http://stackoverflow.com/a/36213728

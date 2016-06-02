@@ -9,6 +9,8 @@ def ProbeEmail(userName,userEmail,trialHash)
 		Name
 		Email
 		Hash for that trial
+	Returns
+		result 		should contain info about whether message was successfully sent. Not sure what is in it
 	"""
 
 	mostofpath= """<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=""" + trialHash + "&rating="
@@ -31,4 +33,5 @@ def ProbeEmail(userName,userEmail,trialHash)
 	                 tag = "response")
 
 	settings.configure()
-	message.send()
+	result = message.send()
+	return result
