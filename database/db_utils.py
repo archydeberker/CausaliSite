@@ -6,7 +6,9 @@ import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
 import hashlib
-import ProbeEmail
+import mail.ProbeEmail
+# from ..mail import ProbeEmail
+import pandas as pd
 
 
 
@@ -27,6 +29,8 @@ def open_connection(URI=URI, db='zapscience', collectionName='users'):
 		db_handle 		handle to database
 		coll_handle 	handle to collection (e.g. can now do coll.find({}))
 
+	Example
+		client, db, collection = open_connection(collectionName='users')
 	"""
 	client = pymongo.MongoClient(URI)
 	db_handle = client[db]
@@ -80,6 +84,9 @@ def init_trials(user_id, experiment_id):
 	Inputs
 		user_id 		string, not an ObjectId
 		experiment_id 	string, not an ObjectId
+
+	Returns
+		input_result	array of insert results
 	"""
 	# get a handle to the users collection and experiments collection
 	client, db_handle, users_coll = open_connection(collectionName='users')
@@ -125,8 +132,9 @@ def init_trials(user_id, experiment_id):
 		) + datetime.timedelta(hours=user["timezone"]) # then add a delta based on the timezone
 
 	# insert each trial into database.
+	insert_result = []
 	for ix, condition in enumerate(condition_array):
-		db_handle['trials'].insert_one({
+		insert_result.append(db_handle['trials'].insert_one({
 			'user_id': user_id,
 			'experiment_id': experiment_id,
 			'trial_number': ix,
@@ -140,7 +148,8 @@ def init_trials(user_id, experiment_id):
 			'last_modified': datetime.datetime.utcnow(),
 			'random_number': np.random.random(),
 			'hash_sha256': hashlib.sha256(user_id+experiment_id+str(ix)+str(np.random.random())).hexdigest() # add a random hash, because if you don't add the np.random.random() then the same user doing experiment twice will go messed up
-		})
+		}))
+	return insert_result
 		
 		
 def init_results(user_id, experiment_id):
@@ -275,12 +284,12 @@ def store_response(trial_hash, response):
 	# open connection to trials database
 	client, db_handle, trials_coll = open_connection(collectionName='trials')
 	# check the has is in the database
-	doc = trials_coll.find_one({"hash_256": trial_hash})
+	doc = trials_coll.find_one({"hash_sha256": trial_hash})
 	if not doc: # if doc cannot be found
 		print("could not find the document with hash %s" % trial_hash)
 		return None
 	# deposit result
-	trials_coll.update_one({"hash_256": trial_hash}, {
+	trials_coll.update_one({"hash_sha256": trial_hash}, {
 		'$set': {
 			'response_given': True,
 			'trialRating': response
@@ -372,6 +381,109 @@ def trials_completed(filter={}):
 	query.update(filter)
 	# search and return the number of retrieved docs
 	return trials_collection.find(query).count()
+
+
+def update_results(results_filter={}):
+	"""Updates every doc in the 'results' collection that fits the filter
+	
+	First finds all results that satisfy the filter, and then loops over them to update.
+	Filter might contain something like last_modified, a particular results _id, a user, experiment,
+	and so on. 
+
+	Input
+		results_filter 		a filter passes directly to mongodb to select documents in the 'results' collection
+
+	"""
+	# open connection
+	client, db, results_collection = open_connection(collectionName='results')
+	# get documents to update
+	docs = results_collection.find(results_filter)
+	# loop over each document
+	for doc in docs:
+		# get all trials for this user and this experiment
+		# and put into a list
+		trials = pd.DataFrame(list(db['trials'].find({
+			"experiment_id": doc["experiment_id"], 
+			"user_id": doc["user_id"]
+		})))
+		# get experiment to read out conditions
+		exp = db['experiments'].find_one({'_id': ObjectId(doc['experiment_id'])})
+		# generate as many lists as conditions, each with a numpy array
+		# with non-NaN scores for that condition.
+		# This will make it easier to do things like std, mean, median, t-tests, f-tests
+		dat = [np.array(trials[(trials.condition == cond) & (trials.response_given)].trialRating) for cond in exp['conditions']]
+		# now update the results doc, calculating some measures along the way
+		print doc["_id"]
+		results_collection.update_one({"_id": doc["_id"]}, {
+			"$set": {
+				"n_completed": int(np.sum(trials.response_given)),
+				"proportion_complete": float(np.sum(trials.response_given)/len(trials.index)),
+				"response_rate": float(np.sum(trials.response_given)/np.sum(trials.response_request_sent)),
+			 	"mean_score": float(np.nanmean(trials.trialRating)),
+				"mean_score_per_condition": [np.mean(cond) for cond in dat],
+				"std_score_per_condition": [np.std(cond) for cond in dat],
+				"median_score_per_condition": [np.median(cond) for cond in dat],
+				"scores_per_condition": [list(cond) for cond in dat],
+				"Cohen_effect_size_0_minus_1": (np.mean(dat[0])-np.mean(dat[1])) / np.sqrt(((len(dat[0])-1)*np.var(dat[0]) + (len(dat[1])-1)*np.var(dat[1])) /	(len(dat[0])+len(dat[1]))),
+			},
+			"$currentDate": {
+				"last_modified": True
+			}
+		})
+
+
+def delete_user(_id):
+	"""Delete a user
+	
+	Input
+		_id			string, will be converted to ObjectId
+
+	Returns
+		DeleteResult result (.deleted_count)
+	"""
+	_, _, coll = open_connection(collectionName='users')
+	return coll.delete_one({'_id': ObjectId(_id)})
+
+
+def delete_experiment(_id):
+	"""Delete an experiment
+
+	Input
+		_id 		string, will be converted to ObjectId
+
+	Returns
+		DeleteResult
+	"""
+	_, _, coll = open_connection(collectionName='experiments')
+	return coll.delete_one({'_id': ObjectId(_id)})
+
+
+def delete_trials(trial_list):
+	"""Takes a list of trial id strings and delete these trials
+
+	Input
+		trial_list		an iterable that contains _id strings
+	Returns
+		a list of DeleteResults
+	"""
+	_, _, coll = open_connection(collectionName='trials')
+	result = []
+	for _id in trial_list:
+		result.append(coll.delete_one({'_id': ObjectId(_id)}))
+	return result
+
+
+def delete_result(_id):
+	"""Delete a result doc
+
+	Input
+		_id 		string, will be converted to ObjectId
+
+	Returns
+		DeleteResult
+	"""
+	_, _, coll = open_connection(collectionName='results')
+	return coll.delete_one({'_id': ObjectId(_id)})
 
 
 # References
