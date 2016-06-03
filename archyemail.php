@@ -20,4 +20,4 @@ try{
 }catch(Exception $generalException){
     // A general exception is thown if the API
     // was unreachable or times out.
-}
+} 
