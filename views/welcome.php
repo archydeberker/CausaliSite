@@ -14,7 +14,7 @@ $message = wordwrap($message, 70, "\r\n");
 // Send
 $temp1 = $_POST["name"];
 $temp2 = $_POST["email"];
-exec("python mail/archyEmail.py $temp1 $temp2");
+exec("python ../mail/archyEmail.py $temp1 $temp2");
 ?>
 
 </body>
