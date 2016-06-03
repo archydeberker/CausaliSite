@@ -2,7 +2,7 @@ import os
 from postmark import PMMail
 from django.conf import settings
 
-def ProbeEmail(userName,userEmail,trialHash)
+def ProbeEmail(userName,userEmail,trialHash):
 	"""sends a probe email to a specified user using a trial hash.
 
 	Inputs
