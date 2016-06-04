@@ -75,7 +75,59 @@ def store_user(name, email, timezone=0):
 		})
 	return result 
 
-	
+
+def register_user_experiment(name, email, timezone, exp_name, condition1, nTrials1, condition2, nTrials2, dependents, ITI, instruction_time, response_time):
+	"""First point of contact after user designs a custom experiment.
+
+	Initialises the user, experiment, trials and results. Inputs come from welcome_custom_exp.php and
+	index_full_exp.html
+
+	Returns
+		success 			if things go wrong at any point (not valid email, or anything else), returns a False so we can let user know it didn't work
+	"""
+	# input checking and default settings
+	if (not name) or (not email):
+		return False
+	if not timezone:
+		timezone = 0
+	if not exp_name:
+		exp_name = 'My Experiment'
+	# store conditions, either default or user provided
+	conditions = []
+	if not condition1:
+		conditions.append('condition1')
+	else:
+		conditions.append(condition1)
+	if not condition2:
+		conditions.append('condition2')
+	else:
+		conditions.append(condition2)
+	# store nTrials
+	nTrials = []
+	if not nTrials1:
+		nTrials.append(10)
+	else:
+		nTrials.append(nTrials1)
+	if not nTrials2:
+		nTrials.append(10)
+	else:
+		nTrials.append(nTrials2)
+	if not dependents:
+		dependents = ['happiness']
+	if not ITI:
+		ITI = 24
+	if not instruction_time:
+		instruction_time = 7
+	if not response_time:
+		response_time = 15
+
+	user = store_user(name, email, timezone)
+	exp = store_experiment(exp_name, conditions, dependents, nTrials, instruction_time, response_time, ITI)
+	init_trials(str(user.inserted_id), str(exp.inserted_id))
+	init_results(str(user.inserted_id), str(exp.inserted_id))
+	print("Successfully registered user, stored experiment, and initiated trials and results.")
+	return True
+
 def init_trials(user_id, experiment_id):
 	""" Initialises all the trials for an experiment for a user, reading a document in the 'experiments' database and populating the 'trials' collection.
 
@@ -172,6 +224,30 @@ def init_results(user_id, experiment_id):
 	return insert_result
 
 		
+def store_experiment(exp_name=['My Experiment'], conditions=['condition1', 'condition2'], dependents=['happiness'], nTrials=[10, 10], instruction_prompt=7, response_prompt=15, ITI=24, randomise='max3'):
+	"""Store a custom experiment.
+
+	See default values for format of input.
+
+	"""
+	# open a new connection
+	client, db, collection = open_connection(collectionName='experiments')
+	# fill with single experiment. Does not check for unique name 
+	insert_result = collection.insert_one({
+		'name': exp_name,
+		'conditions': conditions,
+		'dependent_vars': dependents,
+		'nTrials': nTrials,
+		'instruction_prompt': instruction_prompt, #time of day in hours between 0 and 24
+		'response_prompt': response_prompt, #time of day in hours between 0 and 24
+		'ITI': ITI, # set the ITI between trials in hours
+		'randomise': randomise, #how to randomise; see init_trials() for implementation
+		'created_at': datetime.datetime.utcnow(),
+		'last_modified': datetime.datetime.utcnow(),
+	})
+	return insert_result
+
+
 def init_experiment_meditation():
 	""" temporary code to initialise the meditation experiment in the database. Helpful to identify what variables to store and how to name them
 	
