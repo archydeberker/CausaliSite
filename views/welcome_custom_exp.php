@@ -24,6 +24,7 @@ $temp10 = $_POST["ITI"];
 $temp11 = $_POST["instruction_time"];
 $temp12 = $_POST["response_time"];
 
+echo "<script>console.log('Temp 3 is $temp3');</script>";
 if (empty($temp1)){$temp1 = NULL;};
 if (empty($temp2)){$temp2 = NULL;};
 if (empty($temp3)){$temp3 = NULL;};
@@ -36,7 +37,7 @@ if (empty($temp9)){$temp9 = NULL;};
 if (empty($temp10)){$temp10 = NULL;};
 if (empty($temp11)){$temp11 = NULL;};
 if (empty($temp12)){$temp12 = NULL;};
-
+echo "<script>console.log('Temp 3 is now $temp3');</script>";
 $command = "from database.db_utils import register_user_experiment; register_user_experiment($temp1, $temp2, $temp3, $temp4, $temp5, $temp6, $temp7, $temp8, $temp9, $temp10, $temp11, $temp12)";
 echo "<script>console.log('$command');</script>";
 // exec("python ../mail/archyEmail.py $temp1 $temp2");
