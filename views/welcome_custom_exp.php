@@ -44,7 +44,7 @@ $temp12 = !empty($temp12) ? "'$temp12'" : "NULL";
 // exec('python -c "' . escapeshellarg($command) . '"');
 
 // first argument is the function inside php_to_python, next are all the arguments
-$command = "python php_to_python.py register_user_experiment $temp1, $temp2, $temp3, $temp4, $temp5, $temp6, $temp7, $temp8, $temp9, $temp10, $temp11, $temp12";
+$command = "python php_to_python.py register_user_experiment $temp1 $temp2 $temp3 $temp4 $temp5 $temp6 $temp7 $temp8 $temp9 $temp10 $temp11 $temp12";
 error_log(escapeshellarg($command));
 exec(escapeshellarg($command)) ;
 ?>
