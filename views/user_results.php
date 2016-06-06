@@ -13,7 +13,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 <div class="container"> <!-- one big div to contain all content -->
 	<!-- Header -->
 	<div class="header">
-		<?php include 'views/header.php'; ?>
+		<?php include 'header.php'; ?>
 	</div>
 
 
@@ -36,7 +36,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 
   	<!-- Footer -->
   	<div class="footer">
-		<?php include 'views/footer.php'; ?>
+		<?php include 'footer.php'; ?>
 	</div>
 </div>  
 <!-- End Page Content -->

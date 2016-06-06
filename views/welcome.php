@@ -20,7 +20,7 @@ exec("python ../mail/archyEmail.py $temp1 $temp2");
 <div class="container"> <!-- one big div to contain all content -->
 	<!-- Header -->
 	<div class="header">
-		<?php include 'views/header.php'; ?>
+		<?php include 'header.php'; ?>
 	</div>
 
 
@@ -44,7 +44,7 @@ exec("python ../mail/archyEmail.py $temp1 $temp2");
 
   	<!-- Footer -->
   	<div class="footer">
-		<?php include 'views/footer.php'; ?>
+		<?php include 'footer.php'; ?>
 	</div>
 </div>  
 <!-- End Page Content -->

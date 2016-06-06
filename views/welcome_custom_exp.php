@@ -32,7 +32,7 @@ exec('python -c "from database.db_utils import register_user_experiment; registe
 <div class="container"> <!-- one big div to contain all content -->
 	<!-- Header -->
 	<div class="header">
-		<?php include 'views/header.php'; ?>
+		<?php include 'header.php'; ?>
 	</div>
 
 
@@ -55,7 +55,7 @@ exec('python -c "from database.db_utils import register_user_experiment; registe
 
   	<!-- Footer -->
   	<div class="footer">
-		<?php include 'views/footer.php'; ?>
+		<?php include 'footer.php'; ?>
 	</div>
 </div>  
 <!-- End Page Content -->
