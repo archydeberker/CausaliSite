@@ -85,6 +85,7 @@ def register_user_experiment(name, email, timezone, exp_name, condition1, nTrial
 	Returns
 		success 			if things go wrong at any point (not valid email, or anything else), returns a False so we can let user know it didn't work
 	"""
+	print("Storing user experiment...")
 	# input checking and default settings
 	if (not name) or (not email):
 		return False
@@ -127,6 +128,7 @@ def register_user_experiment(name, email, timezone, exp_name, condition1, nTrial
 	init_results(str(user.inserted_id), str(exp.inserted_id))
 	print("Successfully registered user, stored experiment, and initiated trials and results.")
 	return True
+
 
 def init_trials(user_id, experiment_id):
 	""" Initialises all the trials for an experiment for a user, reading a document in the 'experiments' database and populating the 'trials' collection.
