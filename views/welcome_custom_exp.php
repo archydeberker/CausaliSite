@@ -37,6 +37,8 @@ if (empty($temp9)){$temp9 = NULL;};
 if (empty($temp10)){$temp10 = NULL;};
 if (empty($temp11)){$temp11 = NULL;};
 if (empty($temp12)){$temp12 = NULL;};
+
+$temp3 = !empty($temp3) ? "'$temp3'" : "NULL";
 echo "<script>console.log('Temp 3 is now $temp3');</script>";
 $command = "from database.db_utils import register_user_experiment; register_user_experiment($temp1, $temp2, $temp3, $temp4, $temp5, $temp6, $temp7, $temp8, $temp9, $temp10, $temp11, $temp12)";
 echo "<script>console.log('$command');</script>";
