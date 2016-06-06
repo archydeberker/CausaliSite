@@ -86,6 +86,7 @@ def register_user_experiment(name, email, timezone, exp_name, condition1, nTrial
 		success 			if things go wrong at any point (not valid email, or anything else), returns a False so we can let user know it didn't work
 	"""
 	print("Storing user experiment...")
+	print(exp_name)
 	# input checking and default settings
 	if (not name) or (not email):
 		return False
