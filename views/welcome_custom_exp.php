@@ -39,7 +39,7 @@ $temp11 = !empty($temp11) ? "'$temp11'" : "NULL";
 $temp12 = !empty($temp12) ? "'$temp12'" : "NULL";
 
 $command = "from database.db_utils import register_user_experiment; register_user_experiment($temp1, $temp2, $temp3, $temp4, $temp5, $temp6, $temp7, $temp8, $temp9, $temp10, $temp11, $temp12)";
-echo "<script>console.log($command);</script>";
+echo "<script>console.log(""$command"");</script>";
 // exec("python ../mail/archyEmail.py $temp1 $temp2");
 exec("python -c $command");
 ?>
