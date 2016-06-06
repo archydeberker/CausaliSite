@@ -23,10 +23,22 @@ $temp9 = $_POST["dependent"];
 $temp10 = $_POST["ITI"];
 $temp11 = $_POST["instruction_time"];
 $temp12 = $_POST["response_time"];
-if (empty($temp1)){echo "<script>console.log('is empty');</script>";}
+
 if (empty($temp1)){$temp1 = NULL;};
-echo "<script>console.log('" . $temp1 . "');</script>";
+if (empty($temp2)){$temp2 = NULL;};
+if (empty($temp3)){$temp3 = NULL;};
+if (empty($temp4)){$temp4 = NULL;};
+if (empty($temp5)){$temp5 = NULL;};
+if (empty($temp6)){$temp6 = NULL;};
+if (empty($temp7)){$temp7 = NULL;};
+if (empty($temp8)){$temp8 = NULL;};
+if (empty($temp9)){$temp9 = NULL;};
+if (empty($temp10)){$temp10 = NULL;};
+if (empty($temp11)){$temp11 = NULL;};
+if (empty($temp12)){$temp12 = NULL;};
+
 $command = "from database.db_utils import register_user_experiment; register_user_experiment($temp1, $temp2, $temp3, $temp4, $temp5, $temp6, $temp7, $temp8, $temp9, $temp10, $temp11, $temp12)";
+echo "<script>console.log('$command');</script>";
 // exec("python ../mail/archyEmail.py $temp1 $temp2");
 exec("python -c $command");
 ?>
