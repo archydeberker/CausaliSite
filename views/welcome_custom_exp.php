@@ -25,7 +25,7 @@ $temp11 = $_POST["instruction_time"];
 $temp12 = $_POST["response_time"];
 
 // replace default argument by NULL, which should be read by python as None.
-$temp1 = !empty($temp1) ? "'$temp1" : "NULL";
+$temp1 = !empty($temp1) ? "'$temp1'" : "NULL";
 $temp2 = !empty($temp2) ? "'$temp2'" : "NULL";
 $temp3 = !empty($temp3) ? "'$temp3'" : "NULL";
 $temp4 = !empty($temp4) ? "'$temp4'" : "NULL";
@@ -47,7 +47,6 @@ $temp12 = !empty($temp12) ? "'$temp12'" : "NULL";
 $command = "python ../php_to_python.py register_user_experiment $temp1 $temp2 $temp3 $temp4 $temp5 $temp6 $temp7 $temp8 $temp9 $temp10 $temp11 $temp12";
 // escapeshellarg is fucking up the first argument, taking away its closing quote. 
 error_log(escapeshellarg($command));
-error_log(getcwd());
 exec(escapeshellarg($command));
 ?>
 
