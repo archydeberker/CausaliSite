@@ -1,3 +1,4 @@
+#! /usr/bin/Python
 """This script takes arguments from PHP and runs the required script. 
 
 The first argument is a string with the function to execute, the following strings will be passed on as they are
