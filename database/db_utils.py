@@ -128,6 +128,7 @@ def register_user_experiment(name, email, timezone, exp_name, condition1, nTrial
 	init_trials(str(user.inserted_id), str(exp.inserted_id))
 	init_results(str(user.inserted_id), str(exp.inserted_id))
 	print("Successfully registered user, stored experiment, and initiated trials and results.")
+	sys.stdout.flush()
 	return True
 
 

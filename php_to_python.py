@@ -10,7 +10,7 @@ This script does not do error/input checking, this is all handled in the respect
 
 import sys
 print('Number of input arguments: %d' % len(sys.argv))
-
+sys.stdout.flush()
 def register_user_experiment(args):
 	from database.db_utils import register_user_experiment
 	success = register_user_experiment(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11])
@@ -24,7 +24,11 @@ if __name__ == "__main__":
 		if len(sys.argv)>2: # means there are arguments
 			# replace all NULL with None. args is a list
 			args = [None if arg == 'NULL' else arg for arg in sys.argv[2:]]
+			print(args)
+			sys.stdout.flush()
 			eval(sys.argv[1] + '(args)')
+		else: # no additional arguments
+			eval(sys.argv[1])
 	else:
 		print('no function name provided')
 
