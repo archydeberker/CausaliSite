@@ -40,9 +40,8 @@ $temp12 = !empty($temp12) ? "'$temp12'" : "NULL";
 
 // first argument is the function inside php_to_python, next are all the arguments.
 // The reason for this handler script is that its nigh impossible to deal with all the double and single quotes all over the place, and debugging is a pita. 
-// $command = "python ../php_to_python.py 'register_user_experiment' $temp1 $temp2 $temp3 $temp4 $temp5 $temp6 $temp7 $temp8 $temp9 $temp10 $temp11 $temp12";
-$command = "python ../php_to_python.py";
-// exec(escapeshellarg($command));
+$args = "'register_user_experiment' $temp1 $temp2 $temp3 $temp4 $temp5 $temp6 $temp7 $temp8 $temp9 $temp10 $temp11 $temp12";
+$command = "python ../php_to_python.py " . escapeshellarg($args);
 exec($command);
 ?>
 

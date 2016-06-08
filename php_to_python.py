@@ -23,6 +23,9 @@ def register_user_experiment(args):
 # if this script is being ran on its own (rather than, say, being imported)
 if __name__ == "__main__":
 	# run the requested function and pass an array with all arguments, but only if it exists
-	if sys.argv[1]:
+	if len(sys.argv)>1:
 		eval(sys.argv[1] + '(sys.argv[2:])')
+	else:
+		print('no function name provided')
+
 
