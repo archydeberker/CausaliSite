@@ -169,7 +169,7 @@ def init_trials(user_id, experiment_id):
 			satisfied = True
 		elif exp["randomise"] == 'max3':	
 			# shuffle in some way that maximally 3 times in a row the same condition is given
-			random.shuffle(condition_array)
+			np.random.shuffle(condition_array)
 			# check if restraint is satisfied
 			# https://stackoverflow.com/questions/29081226/limit-the-number-of-repeats-in-pseudo-random-python-list
 			if all(len(list(group)) <= 3 for _, group in groupby(condition_array)):
