@@ -25,8 +25,6 @@ if __name__ == "__main__":
 		if len(sys.argv)>2: # means there are arguments
 			# replace all NULL with None. args is a list
 			args = [None if arg == 'NULL' else arg for arg in sys.argv[2:]]
-			# make sure all numbers are are ints or floats
-			args = []
 			eval(func_name + '(args)')
 		else: # no additional arguments
 			eval(func_name)
