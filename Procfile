@@ -1,2 +1,2 @@
 web: vendor/bin/heroku-php-apache2
-web: bin/python -m CGIHTTPServer $PORT
+web: python -m CGIHTTPServer $PORT
