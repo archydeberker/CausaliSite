@@ -42,7 +42,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 	    <h2 class="w3-wide">ZAP science</h2>
 	    <p class="w3-justify">Enter your details here to participate in the experiment.</p>
 	    <p class="w3-justify">Specify the details of your experiment. We have already filled in default values, enter a value to change them.</p>
-	    <form class="w3-form" action="custom_exp_handler.py" method="post">
+	    <form class="w3-form" action="cg-bin/custom_exp_handler.py" method="post">
 			Name<br><input type="text" size="70" name="name" placeholder="Your Name"><br><br>
 			Email<br><input type="text" size="70" name="email" placeholder="Your email"><br><br>
 			Offset from British winter time, +1 Amsterdam, -5 for New York.<br><input type="text" size="70" name="timezone" placeholder="0"><br><br>
