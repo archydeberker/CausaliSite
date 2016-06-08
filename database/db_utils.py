@@ -91,6 +91,8 @@ def register_user_experiment(name, email, timezone, exp_name, condition1, nTrial
 		return False
 	if not timezone:
 		timezone = 0
+	else: # convert to int
+		timezone = int(timezone)
 	if not exp_name:
 		exp_name = 'My Experiment'
 	# store conditions, either default or user provided
@@ -107,20 +109,26 @@ def register_user_experiment(name, email, timezone, exp_name, condition1, nTrial
 	nTrials = []
 	if not nTrials1:
 		nTrials.append(10)
-	else:
-		nTrials.append(nTrials1)
+	else nTrials1:
+		nTrials.append(int(nTrials1)
 	if not nTrials2:
 		nTrials.append(10)
 	else:
-		nTrials.append(nTrials2)
+		nTrials.append(int(nTrials2)
 	if not dependents:
 		dependents = ['happiness']
 	if not ITI:
 		ITI = 24
+	else:
+		ITI = int(ITI)
 	if not instruction_time:
 		instruction_time = 7
+	else:
+		instruction_time = int(instruction_time)
 	if not response_time:
 		response_time = 15
+	else:
+		response_time = int(response_time)
 
 	user = store_user(name, email, timezone)
 	exp = store_experiment(exp_name, conditions, dependents, nTrials, instruction_time, response_time, ITI)
