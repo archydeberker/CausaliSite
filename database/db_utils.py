@@ -7,9 +7,8 @@ from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
 import hashlib
 import mail.ProbeEmail
-# from ..mail import ProbeEmail
 import pandas as pd
-
+from itertools import groupby
 
 
 
