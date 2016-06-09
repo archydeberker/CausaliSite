@@ -350,7 +350,7 @@ def get_uncompleted_response_prompts(include_past=True, include_future=False, so
 		datesearch = {'response_date': right_now}
 	# update original query with additional constraints on what documents to return
 	response_query = {'response_request_sent': False}
-	response_query.update(datesearch)
+	# response_query.update(datesearch)
 	# set sort
 	if sort == 'chronological':
 		sort_as = pymongo.ASCENDING
