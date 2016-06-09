@@ -433,7 +433,7 @@ def send_outstanding_instructions():
 	for prompt in outstanding:
 		# get the user
 		user = users_coll.find_one({"_id": prompt['user_id']})
-		INSTRUCTION_EMAIL_FUNCTION_DOES_NOT_EXIST_YET(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
+		INSTRUCTION_EMAIL_FUNCTION_DOES_NOT_EXIST_YET(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'], condition=prompt['condition'])
 		# store in the trials collection that the instruction has been sent and exact datetime
 		trials_coll.update_one({"_id": prompt["_id"]}, {
 			"$set": {
