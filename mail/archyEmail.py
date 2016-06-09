@@ -4,6 +4,10 @@ import logging
 from postmark import PMMail
 import database.db_utils as db_utils
 
+from django.conf import settings
+
+settings.configure(DEBUG=True)
+
 # write to database
 db_utils.store_user(name=sys.argv[1], email=sys.argv[2])	
 
