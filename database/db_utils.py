@@ -88,7 +88,7 @@ def store_user(name, email, timezone=0):
 	eroi = expresult['_id']
 	print eroi
 
-	init_trials(uroi, eroi)
+	init_trials(uroi.toString(), eroi.toString())
 
 	return result 
 
