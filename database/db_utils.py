@@ -7,10 +7,7 @@ import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
 import hashlib
-try:
-	import mail.ProbeEmail
-except:
-	from ..mail import ProbeEmail
+import mail.ProbeEmail.ProbeEmail as ProbeEmail
 import pandas as pd
 from itertools import groupby
 
