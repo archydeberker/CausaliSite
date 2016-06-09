@@ -409,7 +409,7 @@ def send_outstanding_response_prompts():
 	# at this stage there are outstanding response prompts
 	for prompt in outstanding:
 		# get the user
-		user = users_coll.find_one({"_id": prompt['user_id']})
+		user = users_coll.find_one({'_id': ObjectId(prompt['user_id'])})
 		result = ProbeEmail.ProbeEmail(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
 		# TO DO check that result is correct and only continue if correct
 		#################
