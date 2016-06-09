@@ -109,7 +109,7 @@ def register_user_experiment(name, email, timezone, exp_name, condition1, nTrial
 	nTrials = []
 	if not nTrials1:
 		nTrials.append(10)
-	else nTrials1:
+	else:
 		nTrials.append(int(nTrials1))
 	if not nTrials2:
 		nTrials.append(10)
