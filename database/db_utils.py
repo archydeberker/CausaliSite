@@ -76,9 +76,19 @@ def store_user(name, email, timezone=0):
 		})
 
 
-	print result
-	print result['user_id']
-	init_trials(user_id, experiment_id)
+	client, db, collection = open_connection(collectionName='users')
+	usrresult = collection.find_one({'name': name})
+	uroi = usrresult['_id'] 
+	print uroi
+
+	client.close()
+
+	client, db, collection = open_connection(collectionName='experiments')
+	expresult = collection.find_one({'name': 'meditation'})
+	eroi = expresult['_id']
+	print eroi
+
+	init_trials(uroi, eroi)
 
 	return result 
 
