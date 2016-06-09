@@ -14,7 +14,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 // Send
 $temp1 = $_POST["name"];
 $temp2 = $_POST["email"];
-exec("python ../mail/archyEmail.py $temp1 $temp2");
+exec("python ../mail/SignUpConfirmEmail.py $temp1 $temp2");
 ?>
 <!-- Page content -->
 <div class="container"> <!-- one big div to contain all content -->
