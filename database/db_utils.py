@@ -7,7 +7,7 @@ import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
 import hashlib
-#import mail.ProbeEmail.ProbeEmail as ProbeEmail
+import mail.ProbeEmail as ProbeEmail
 import pandas as pd
 from itertools import groupby
 
@@ -389,35 +389,35 @@ def store_response(trial_hash, response):
 	})
 
 
-#def send_outstanding_response_prompts():
-	# """Uses get_uncompleted_response_prompts() to get to-do list, then sends emails.
+def send_outstanding_response_prompts():
+	"""Uses get_uncompleted_response_prompts() to get to-do list, then sends emails.
 
-	# """
-	# outstanding = get_uncompleted_response_prompts(include_past=True, include_future=False)
-	# if not outstanding: # if list is empty
-	# 	print("no outstanding response prompts")
-	# 	return None
+	"""
+	outstanding = get_uncompleted_response_prompts(include_past=True, include_future=False)
+	if not outstanding: # if list is empty
+		print("no outstanding response prompts")
+		return None
 
-	# client, db_handle, users_coll = open_connection(collectionName='users')
-	# trials_coll = db_handle["trials"]
-	# # at this stage there are outstanding response prompts
-	# for prompt in outstanding:
-	# 	# get the user
-	# 	user = users_coll.find_one({"_id": prompt['user_id']})
-	# 	result = ProbeEmail.ProbeEmail(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
-	# 	# TO DO check that result is correct and only continue if correct
-	# 	#################
+	client, db_handle, users_coll = open_connection(collectionName='users')
+	trials_coll = db_handle["trials"]
+	# at this stage there are outstanding response prompts
+	for prompt in outstanding:
+		# get the user
+		user = users_coll.find_one({"_id": prompt['user_id']})
+		result = ProbeEmail.ProbeEmail(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
+		# TO DO check that result is correct and only continue if correct
+		#################
 
-	# 	# store that instruction is sent, set the time instruction was sent, and update last_modified
-	# 	trials_coll.update_one({"_id": prompt["_id"]}, {
-	# 		"$set": {
-	# 			"response_request_sent": True
-	# 		}, 
-	# 		"$currentDate": {
-	# 			"response_request_sent_date": True, 
-	# 			"last_modified": True
-	# 		}
-	# 	})
+		# store that instruction is sent, set the time instruction was sent, and update last_modified
+		trials_coll.update_one({"_id": prompt["_id"]}, {
+			"$set": {
+				"response_request_sent": True
+			}, 
+			"$currentDate": {
+				"response_request_sent_date": True, 
+				"last_modified": True
+			}
+		})
 
 
 def send_outstanding_instructions():
