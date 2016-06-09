@@ -7,6 +7,7 @@ print("Running scheduled_job.py")
 
 import database.db_utils as db_utils
 
+
 db_utils.send_outstanding_instructions()
 db_utils.send_outstanding_response_prompts()
 db_utils.update_results()

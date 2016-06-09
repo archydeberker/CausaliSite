@@ -6,7 +6,7 @@ import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
 import hashlib
-import mail.ProbeEmail
+from mail.ProbeEmail import ProbeEmail
 import pandas as pd
 from itertools import groupby
 
@@ -14,7 +14,8 @@ from itertools import groupby
 
 
 # find the database URI. If not available in the environment, use local mongodb host
-URI = os.getenv('MONGO_URI', 'mongodb://localhost')
+# URI = os.getenv('MONGO_URI', 'mongodb://localhost')
+URI = 'mongodb://peter:test@ds011943.mlab.com:11943/zapscience' # FOR DEV ONLY
 
 # function definitions that can be used by other scripts
 def open_connection(URI=URI, db='zapscience', collectionName='users'):
@@ -402,7 +403,7 @@ def send_outstanding_response_prompts():
 	for prompt in outstanding:
 		# get the user
 		user = users_coll.find_one({"_id": prompt['user_id']})
-		result = ProbeEmail.ProbeEmail(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
+		result = ProbeEmail(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
 		# TO DO check that result is correct and only continue if correct
 		#################
 
