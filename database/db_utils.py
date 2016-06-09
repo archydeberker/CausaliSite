@@ -1,4 +1,4 @@
-# import packages
+	# import packages
 import pymongo
 import sys
 import os
@@ -110,11 +110,11 @@ def register_user_experiment(name, email, timezone, exp_name, condition1, nTrial
 	if not nTrials1:
 		nTrials.append(10)
 	else nTrials1:
-		nTrials.append(int(nTrials1)
+		nTrials.append(int(nTrials1))
 	if not nTrials2:
 		nTrials.append(10)
 	else:
-		nTrials.append(int(nTrials2)
+		nTrials.append(int(nTrials2))
 	if not dependents:
 		dependents = ['happiness']
 	if not ITI:
