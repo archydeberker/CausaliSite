@@ -5,6 +5,7 @@ python -m database.debug.py
 
 Should run this on a local database so you can just delete the entire database when you're done. 
 """
+
 import db_utils as db
 from bson.objectid import ObjectId
 import datetime

@@ -1,4 +1,5 @@
 	# import packages
+
 import pymongo
 import sys
 import os
@@ -6,7 +7,10 @@ import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
 import hashlib
-from mail.ProbeEmail import ProbeEmail
+try:
+	import mail.ProbeEmail
+except:
+	from ..mail import ProbeEmail
 import pandas as pd
 from itertools import groupby
 
@@ -403,7 +407,7 @@ def send_outstanding_response_prompts():
 	for prompt in outstanding:
 		# get the user
 		user = users_coll.find_one({"_id": prompt['user_id']})
-		result = ProbeEmail(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
+		result = ProbeEmail.ProbeEmail(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
 		# TO DO check that result is correct and only continue if correct
 		#################
 

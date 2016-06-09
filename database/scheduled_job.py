@@ -4,8 +4,12 @@
 
 """
 print("Running scheduled_job.py")
+import os
+try:
+	import database.db_utils as db_utils
+except:
+	import db_utils
 
-import database.db_utils as db_utils
 
 
 db_utils.send_outstanding_instructions()
