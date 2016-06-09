@@ -74,6 +74,12 @@ def store_user(name, email, timezone=0):
 		'timezone': timezone,
 		'first_name': name.partition(' ')[0] # get the first part of the name until a space (or whole thing if no space)
 		})
+
+
+	print result
+	print result['user_id']
+	init_trials(user_id, experiment_id)
+
 	return result 
 
 
