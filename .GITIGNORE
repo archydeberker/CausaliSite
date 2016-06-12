@@ -3,3 +3,4 @@ vendor/
 venv/
 .env
 *.DS_store
+frontend_play/docs
