@@ -15,6 +15,10 @@
   margin-bottom: 20px;
 }
 
+.container {
+	background-color: #ffffff;
+}
+
 body {
   padding-top: 20px;
   padding-bottom: 20px;
@@ -97,4 +101,5 @@ body {
 
 body {
 	font-family: 'Open Sans', sans-serif;
+	/*background: url('assets/lab-flasks.jpg')*/
 }
