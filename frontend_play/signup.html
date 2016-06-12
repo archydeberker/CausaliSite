@@ -30,6 +30,7 @@
     <script type="text/javascript" src="dist/js/bootstrap-timepicker.min.js"></script>
 
   
+  <!-- Time picker comes from here: https://jdewit.github.io/bootstrap-timepicker/ -->
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -53,13 +54,19 @@
       </div>
 
       <form class="form-signin">
+
         <h2 class="form-signin-heading" align="center">Sign up to Causali</h2>
+        <br>
+
+
+        <h4> Your details </h4>
         <label for="inputName" class="sr-only">Name</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Name" required autofocus>
         <label for="inputEmail" class="sr-only">Email Address</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required autofocus>
+        <label for="inputPassword" class="sr-only">Choose A Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Choose A Password" required autofocus>
+        <br>
         
        <!--  <div class="dropdown theme-dropdown clearfix">
         <a id="dropdownMenu1" href="#" class="sr-only dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="false" aria-expanded="false">Dropdown <span class="caret"></span></a>
@@ -73,13 +80,26 @@
         </ul>
       </div> -->
 
+      <h4> Experiment preferences </h4>
+      <p> What time would you like your instruction email? </p>
       <div class="input-group bootstrap-timepicker timepicker">
-        <input id="timepicker1" type="text" class="form-control input-small">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-time" fontsize="20px"></i></span>
+        <input id="timepicker1" type="text" class="form-control input-small" default-time="7.00 AM">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-time" style="font-size: 17px"></i></span>
       </div>
 
       <script type="text/javascript">
-        $('#timepicker1').timepicker();
+        $('#timepicker1').timepicker({defaultTime: "7.00 AM"});
+      </script>
+  
+
+      <p> What time would you like your reporter email? </p>
+      <div class="input-group bootstrap-timepicker timepicker">
+        <input id="timepicker2" type="text" class="form-control input-small">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-time" style="font-size: 17px"></i></span>
+      </div>
+
+      <script type="text/javascript">
+        $('#timepicker2').timepicker({defaultTime: "4.00 PM"});
       </script>
   
         <div class="checkbox">
