@@ -28,8 +28,9 @@ def confirm_signup_meditation(name="Tester", email="a@deberker.com"):
 	                 Warmly,
 
 	                 The Causali team
-	                 """ % name
-	                 tag = "welcome")
+	                 """ % name,
+	                 tag = "welcome"
+             	)
 
 	settings.configure()
 	message.send()
