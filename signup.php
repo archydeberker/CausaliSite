@@ -28,7 +28,7 @@
           <h3 class="text-muted">Causali</h3>
         </div>
         <div class='jumbotron'> <p class="lead"> This experiment is going to help you figure out whether meditating makes you calmer. </div></p>
-      <form class="form-signin" action="views/welcome.php" method="post">
+      <form class="form-signin" action="./welcome.php" method="post">
 
         <div class="row">
           <div class="col-sm-6 col-md-4">
