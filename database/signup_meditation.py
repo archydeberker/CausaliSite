@@ -21,5 +21,5 @@ exp_id = exp.inserted_id
 trials = db.init_trials(user_id, exp_id)
 trial_ids = [str(trials.inserted_id) for foo in trials]
 
-# send an email to the user
+# send an email to the user 
 confirm_signup_meditation(name, email)
