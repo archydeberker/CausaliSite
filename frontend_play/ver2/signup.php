@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  <?php $thisPage="signup"; ?>
+  <?php $thisPage="index"; ?>
   <?php include_once('assetHeader.php') ?>
 
     <!-- Custom styles for timepicker-->
@@ -40,8 +40,8 @@
         <input type="email" id="inputEmail" class="form-control" placeholder="Name" required autofocus>
         <label for="inputEmail" class="sr-only">Email Address</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required>
-        <label for="inputPassword" class="sr-only">Choose A Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Choose A Password" required autofocus>
+        <!--<label for="inputPassword" class="sr-only">Choose A Password</label>-->
+        <!--<input type="password" id="inputPassword" class="form-control" placeholder="Choose A Password" required autofocus>-->
         <br>
         
        <!--  <div class="dropdown theme-dropdown clearfix">
