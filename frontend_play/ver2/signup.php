@@ -48,6 +48,9 @@
               <div class="caption">
                 <h3 style="min-height: 120px">Your instruction email tells you whether to meditate</h3>
                 <p style="min-height: 100px">What time would you like to receive your instruction email?</p>
+                <script type="text/javascript">
+                $('#timepicker1').timepicker({defaultTime: "7.00 AM"});
+              </script>
                 <div class="input-group-archy">
                   <input id="timepicker1" type="text" class="form-control input-small" default-time="7.00 AM"> 
                 </div>  
@@ -61,6 +64,9 @@
                 <h3 style="min-height: 120px">Later that day, we'll ask you how you're feeling</h3>
                 <p style="min-height: 100px">What time would you like to receive your response email?</p>
                  <div class="input-group-archy">
+                 <script type="text/javascript">
+                  $('#timepicker2').timepicker({defaultTime: "4.00 PM"});
+                </script>
                 <input id="timepicker2" type="text" class="form-control input-small" default-time="7.00 AM"> 
               </div>
               </div>
