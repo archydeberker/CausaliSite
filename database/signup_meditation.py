@@ -4,7 +4,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.join(os.path.realpath(__file__))), os.pardir)))
 import db_utils as db
-import mail.SignUpConfirmEmail as mail
+from mail.SignUpConfirmEmail import confirm_signup_meditation
 
 name = sys.argv[1]
 email = sys.argv[2]
@@ -23,4 +23,4 @@ trials = db.init_trials(user_id, exp_id)
 trial_ids = [str(trials.inserted_id) for foo in trials]
 
 # send an email to the user 
-mail.confirm_signup_meditation(name, email)
+confirm_signup_meditation(name, email)
