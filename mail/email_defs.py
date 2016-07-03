@@ -44,7 +44,7 @@ def probe_meditation(userName,userEmail,trialHash):
 		mostofpath + '2"'  + restofpath +\
 		mostofpath + '3"'  + restofpath +\
 		mostofpath + '4"'  + restofpath +\
-		mostofpath + '5"'  + restofpath +\ 
+		mostofpath + '5"'  + restofpath +\
 		"<br><p>Warmly,<br><br>Your friends at Causali</p>" +\
 		"</body> </html>"
 
