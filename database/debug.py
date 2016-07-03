@@ -11,12 +11,13 @@ from bson.objectid import ObjectId
 import datetime
 _, _, trials_coll = db.open_connection(collectionName='trials')
 
-user, trials = db.store_user('test', 'test@test.com')
+user = db.store_user('test', 'test@test.com')
 user_id = user.inserted_id
 print("user: %s" % user_id)
 exp = db.init_experiment_meditation()
 exp_id = exp.inserted_id
 print("Experiment: %s" % exp_id)
+foo = db.insert_trials(user_id, exp_id)
 trial_ids = [str(foo.inserted_id) for foo in trials]
 print("Inserted trials: %d" % len(trials))
 print("updating a trial to have a response date in the past")

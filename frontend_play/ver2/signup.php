@@ -29,17 +29,17 @@
         <h3 class="text-muted">Causali</h3>
       </div>
 
-      <form class="form-signin">
+      <form class="form-signin" action="views/welcome.php" method="post">
 
         <h2 class="form-signin-heading" align="center">Sign up to Causali</h2>
         <br>
 
 
         <h4> Your details </h4>
-        <label for="inputName" class="sr-only">Name</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Name" required autofocus>
-        <label for="inputEmail" class="sr-only">Email Address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required>
+        <!--<label for="inputName" class="sr-only">Name</label>-->
+        <input type="text" name="inputName" class="form-control" placeholder="Name" required autofocus>
+        <!--<label for="inputEmail" class="sr-only">Email Address</label>-->
+        <input type="email" name="inputEmail" class="form-control" placeholder="Email address" required>
         <!--<label for="inputPassword" class="sr-only">Choose A Password</label>-->
         <!--<input type="password" id="inputPassword" class="form-control" placeholder="Choose A Password" required autofocus>-->
         <br>

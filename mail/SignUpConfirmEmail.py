@@ -6,24 +6,30 @@ import sys
 import logging
 from postmark import PMMail
 from django.conf import settings
-import database.db_utils as db_utils
 
-print sys.argv[1]
-print sys.argv[2]
+def confirm_signup_meditation(name="Tester", email="a@deberker.com")
+	"""Sends a welcome message to a user.
+	Called by signup_meditation.py. Make sure to use a valid email address, otherwise Postmark gets angry.
 
+	"""
+	message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
+		#,'4322111a-0d75-4777-8111-2d83f0664762'
+	                 subject = "Welcome to Causali!" ,
+	                 sender = "a@deberker.com",
+	                 to = email,
+	                 # html_body = "Hey %s! <br><br>Welcome to your very own science lab. You've signed up for the meditation experiment.<br><em>We'll send you your first trial tomorrow!</em>" % name,
+	                 html_body = """
+	                 Hey %s!
 
-message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
-	#,'4322111a-0d75-4777-8111-2d83f0664762'
-                 subject = "Welcome to Causali!" ,
-                 sender = "a@deberker.com",
-                 to = sys.argv[2],
-                 html_body = "Hey " + sys.argv[1] + " Thanks for signing up for your first experiment. <br> <em> We'll send you your first trial tomorrow! </em>",
-                 tag = "welcome")
+	                 Welcome to your very own science lab. You've signed up for the meditation experiment.
 
-settings.configure()
+	                 <em>We'll send you your first trial tomorrow!</em>
 
+	                 Warmly,
 
-message.send()
+	                 The Causali team
+	                 """ % name
+	                 tag = "welcome")
 
-# write to database
-db_utils.store_user(name=sys.argv[1], email=sys.argv[2])
+	settings.configure()
+	message.send()

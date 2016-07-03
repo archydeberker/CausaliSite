@@ -49,8 +49,7 @@ def close_connection(client):
 
 
 def store_user(name, email, timezone=0):
-	""" Store user info in a collection. ALSO INITIALISES TRIALS FOR THE USER ON THE MEDITATION EXPERIMENT.
-
+	""" Store user info in a collection. 
 	As I understand it you don't have to sanitise inputs in MongoDB unless you're concatenating strings.
 	Instead of using the has we can use the objectID in the mongoDB database, which is unique. 
 	HOWEVER, IT MIGHT BE EASY TO PREDICT WHAT OTHER OBJECT IDS LOOK LIKE BASED ON YOUR OWN, so
@@ -76,10 +75,8 @@ def store_user(name, email, timezone=0):
 		'first_name': name.partition(' ')[0] # get the first part of the name until a space (or whole thing if no space)
 		})
 
-	# initialises meditation trials for this user!
-	result_trials = init_trials(user_id=result.inserted_id)
 
-	return result, result_trials
+	return result
 
 
 def register_user_experiment(name, email, timezone, exp_name, condition1, nTrials1, condition2, nTrials2, dependents, ITI, instruction_time, response_time):

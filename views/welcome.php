@@ -9,12 +9,16 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 </style>
 
 <body>
-<!-- PHP bit to send email and capture data -->
+<!-- PHP bit to store data and send email -->
 <?php
-// Send
-$temp1 = $_POST["name"];
-$temp2 = $_POST["email"];
-exec("python ../mail/SignUpConfirmEmail.py $temp1 $temp2");
+$name = $_POST["inputName"];
+$email = $_POST["inputEmail"];
+
+// sanitise input
+$name_clean = filter_var($name, FILTER_SANITIZE_STRING)
+$email_clean = filter_var($email, FILTER_SANITIZE_EMAIL)
+
+exec("python ../database/signup_meditation.py $name_clean $email_clean");
 ?>
 <!-- Page content -->
 <div class="container"> <!-- one big div to contain all content -->
