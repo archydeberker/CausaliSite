@@ -16,7 +16,7 @@
       </p>
     </div>
 
-    <div class="jumbotron" style= "background-img: url('/assets/lab-flasks.jpg')">
+    <div class="jumbotron">
       <h1> </h1>
       <p class="lead">Causali brings the power of the scientific method to your life to help you find ways to be happier, healthier, and more productive.</p>
       <p> Try out our first experiment: </p>
