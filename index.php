@@ -1,37 +1,94 @@
 <!DOCTYPE html>
-<html>
-<title>ZAP science</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="views/stylesheet.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-<style>
-body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
-</style>
+<html lang="en">
 
-<body>
-<!-- Page content -->
-<div class="container-with-bg"> <!-- one big div to contain all content -->
-	<!-- Header -->
-	<div class="header">
-		<?php include 'views/header.php'; ?>
-	</div>
-	<!-- Content -->
-  	<div class="page-content center padding-64">
-	    <h2 class="wide">ZAP science</h2>
-	    <p class="center">Enter your details here to participate in the experiment.</p>
-	    <form class="form" action="views/welcome.php" method="post">
-			<input type="text" name="name" placeholder="name"><br>
-			<input type="text" name="email" placeholder="email"><br><br>
-			<input type="submit">
-		</form>
-  	</div>
-  	<!-- Footer -->
-  	<div class="footer">
-		<?php include 'views/footer.php'; ?>
-	</div>
-</div>  
-<!-- End Page Content -->
+  <head>
+    <?php $thisPage="index"; ?>
+    <?php include_once('assetHeader.php') ?>
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="header clearfix">
+        <?php include_once('header.php') ?>
+      <p>
+        <h3 class="text-muted" ">Causali</h3> 
+      </p>
+    </div>
+
+    <div class="jumbotron">
+      <h1> </h1>
+      <p class="lead">Causali brings the power of the scientific method to your life to help you find ways to be happier, healthier, and more productive.</p>
+      <p> Try out our first experiment: </p>
+      <p><a class="btn btn-lg btn-success" href="../ver2/signup.php" role="button">Does meditation make me calmer?</a></p>
+      <h5>Already have an account? <a href="../ver2/signin.php"> Sign in </a> </h5>
+    </div>
+
+    <div class="row marketing">
+
+      <div class="col-lg-6">
+
+        <div class='media'>
+          <div class="media-body">
+           <h4>Science, done properly</h4>
+           <p>With rigorous randomisation and statistics, Causali generates conclusions you can trust.</p>
+         </div>
+         <div class="media-right media-middle">
+          <span class="glyphicon glyphicon-education"></span>
+        </div>
+      </div>
+
+      <div class='media'>
+        <div class="media-body">
+          <h4>Data, beautiful data</h4>
+          <p> See your data blossom in custom graphs and analyses.</p>
+        </div>
+        <div class="media-right media-middle">
+          <span class="glyphicon glyphicon-stats"></span>
+        </div>
+      </div>
+
+
+      <!-- <img src="assets/brand/bootstrap-solid.svg" align="right" width="50px" height="50px" class="img-responsive inline-block"> -->
+
+
+      <!-- <img src="assets/brand/bootstrap-solid.svg" align="right" width="50px" height="50px" class="img-responsive inline-block"> -->
+
+    </div>
+
+    <div class="col-lg-6">
+      <div class='media'>
+        <div class="media-body">
+          <h4>How does it work?</h4>
+          <p> Sign up for an experiment to receive daily emails telling you what action to take, and provide feedback via prompt emails.</p>
+        </div>
+        <div class="media-right media-middle">
+          <span class="glyphicon glyphicon-cog"></span> 
+        </div>  
+
+        <div class='media'>
+          <div class="media-body">
+            <h4>Share your science</h4>
+            <p> Compare your findings with your friends.</p>
+          </div>
+          <div class="media-right media-middle">
+            <span class="glyphicon glyphicon-user"></span> 
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>  
+  <footer class="footer">
+    <p>&copy; 2016 Causali, Inc.</p>
+  </footer>
+
+</div> <!-- /container -->
 </div>
 
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>
