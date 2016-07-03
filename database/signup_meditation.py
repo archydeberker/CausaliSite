@@ -22,8 +22,11 @@ print("Inserted experiment: %s" % exp_id)
 
 # initialise trials
 trials = db.init_trials(user_id, exp_id)
-trial_ids = [str(trials.inserted_id) for foo in trials]
+trial_ids = [str(foo.inserted_id) for foo in trials]
 print("Inserted trials. First trial id: %s" % trial_ids[0])
 
 # send an email to the user 
 confirm_signup_meditation(name, email)
+
+
+print("Finished signup_meditation.py")
