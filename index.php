@@ -10,7 +10,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 
 <body>
 <!-- Page content -->
-<div class="container"> <!-- one big div to contain all content -->
+<div class="container-with-bg"> <!-- one big div to contain all content -->
 	<!-- Header -->
 	<div class="header">
 		<?php include 'views/header.php'; ?>
