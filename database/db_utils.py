@@ -77,9 +77,9 @@ def store_user(name, email, timezone=0):
 		})
 
 	# initialises meditation trials for this user!
-	init_trials(user_id=result.inserted_id)
+	result_trials = init_trials(user_id=result.inserted_id)
 
-	return result 
+	return result, result_trials
 
 
 def register_user_experiment(name, email, timezone, exp_name, condition1, nTrials1, condition2, nTrials2, dependents, ITI, instruction_time, response_time):
@@ -289,7 +289,7 @@ def init_experiment_meditation():
 		'instruction_prompt': 7, #time of day in hours between 0 and 24
 		'response_prompt': 15, #time of day in hours between 0 and 24
 		'ITI': 24, # set the ITI between trials in hours
-		'randomise': 'complete', #how to randomise; see init_trials() for implementation
+		'randomise': 'max3', #how to randomise; see init_trials() for implementation
 		'created_at': datetime.datetime.utcnow(),
 		'last_modified': datetime.datetime.utcnow(),
 	})
