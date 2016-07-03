@@ -20,8 +20,8 @@
       <h1> </h1>
       <p class="lead">Causali brings the power of the scientific method to your life to help you find ways to be happier, healthier, and more productive.</p>
       <p> Try out our first experiment: </p>
-      <p><a class="btn btn-lg btn-success" href="../ver2/signup.php" role="button">Does meditation make me calmer?</a></p>
-      <h5>Already have an account? <a href="../ver2/signin.php"> Sign in </a> </h5>
+      <p><a class="btn btn-lg btn-success" href="signup.php" role="button">Does meditation make me calmer?</a></p>
+      <h5>Already have an account? <a href="signin.php"> Sign in </a> </h5>
     </div>
 
     <div class="row marketing">
@@ -89,6 +89,6 @@
 </div>
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="frontend_play/assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>

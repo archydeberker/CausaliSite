@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
       <?php $thisPage="about"; ?>
-      <?php include_once('../ver2/assetHeader.php') ?>
+      <?php include_once('assetHeader.php') ?>
 
   </head>
 
@@ -26,19 +26,19 @@
     <div class="row placeholders" align="centre">
             
             <div class="col-xs-4 col-sm-4 placeholder">
-              <img src="../assets/zeb.jpg" width="150" height="150" class="img-responsive" alt="Generic placeholder thumbnail">
+              <img src="frontend_play/assets/zeb.jpg" width="150" height="150" class="img-responsive" alt="Generic placeholder thumbnail">
               <h4>Zeb Kurth-Nelson</h4>
               <span class="text-muted">Z</span>
             </div>
             
             <div class="col-xs-4 col-sm-4 placeholder">
-              <img src="../assets/archy.jpg" width="150" height="150" class="img-responsive" alt="Generic placeholder thumbnail">
+              <img src="frontend_play/assets/archy.jpg" width="150" height="150" class="img-responsive" alt="Generic placeholder thumbnail">
               <h4>Archy de Berker</h4>
               <span class="text-muted">A</span>
             </div>
             
             <div class="col-xs-4 col-sm-4 placeholder">
-              <img src="../assets/peter.jpg" width="150" height="150" class="img-responsive" alt="Generic placeholder thumbnail">
+              <img src="frontend_play/assets/peter.jpg" width="150" height="150" class="img-responsive" alt="Generic placeholder thumbnail">
               <h4>Peter Smittennaar</h4>
               <span class="text-muted">P</span>
             </div>
@@ -53,6 +53,6 @@
 
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="frontend_play/assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>

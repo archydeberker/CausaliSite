@@ -5,10 +5,10 @@
   <?php include_once('assetHeader.php') ?>
 
   <!-- Custom styles for timepicker-->
-  <link type="text/css" href="../dist/css/bootstrap-timepicker.min.css" />
-  <script type="text/javascript" src="../dist/js/jquery.js"></script>
-  <script type="text/javascript" src="../dist/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="../dist/js/bootstrap-timepicker.min.js"></script>
+  <link type="text/css" href="frontend_play/dist/css/bootstrap-timepicker.min.css" />
+  <script type="text/javascript" src="frontend_play/dist/js/jquery.js"></script>
+  <script type="text/javascript" src="frontend_play/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="frontend_play/dist/js/bootstrap-timepicker.min.js"></script>
 
   
   <!-- Time picker comes from here: https://jdewit.github.io/bootstrap-timepicker/ -->
@@ -33,7 +33,7 @@
         <div class="row">
           <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
-              <img src="../assets/ruler.jpg" alt="...">
+              <img src="frontend_play/assets/ruler.jpg" alt="...">
               <div class="caption">
                 <h3 style="min-height: 120px">We'll use email to run the experiment and collect data.</h3>
                 <p style="min-height: 100px">What email address would you like us to use?</p>
@@ -45,7 +45,7 @@
           </div>
           <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
-              <img src="../assets/meditation.jpg" alt="...">
+              <img src="frontend_play/assets/meditation.jpg" alt="...">
               <div class="caption">
                 <h3 style="min-height: 120px">Your instruction email tells you whether to meditate</h3>
                 <p style="min-height: 100px">What time would you like to receive your instruction email?</p>
@@ -61,7 +61,7 @@
           </div>
           <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
-              <img src="../assets/smiley.jpg" alt="...">
+              <img src="frontend_play/assets/smiley.jpg" alt="...">
               <div class="caption">
                 <h3 style="min-height: 120px">Later that day, we'll ask you how you're feeling</h3>
                 <p style="min-height: 100px">What time would you like to receive your response email?</p>
@@ -97,6 +97,6 @@
 
 
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-  <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
+  <script src="frontend_play/assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>
