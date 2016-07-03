@@ -1,8 +1,9 @@
-	# import packages
-
-import pymongo
+# import packages
 import sys
 import os
+# this adds the zapscience folder so we dont have to deal with bs relative path issues
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.join(os.path.realpath(__file__))), os.pardir)))
+import pymongo
 import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
@@ -48,7 +49,7 @@ def close_connection(client):
 
 
 def store_user(name, email, timezone=0):
-	""" Store user info in a collection.
+	""" Store user info in a collection. ALSO INITIALISES TRIALS FOR THE USER ON THE MEDITATION EXPERIMENT.
 
 	As I understand it you don't have to sanitise inputs in MongoDB unless you're concatenating strings.
 	Instead of using the has we can use the objectID in the mongoDB database, which is unique. 
@@ -75,20 +76,8 @@ def store_user(name, email, timezone=0):
 		'first_name': name.partition(' ')[0] # get the first part of the name until a space (or whole thing if no space)
 		})
 
-
-	client, db, collection = open_connection(collectionName='users')
-	usrresult = collection.find_one({'name': name})
-	uroi = usrresult['_id'] 
-	print uroi
-
-	client.close()
-
-	client, db, collection = open_connection(collectionName='experiments')
-	expresult = collection.find_one({'name': 'meditation'})
-	eroi = expresult['_id']
-	print eroi
-
-	init_trials(uroi.toString(), eroi.toString())
+	# initialises meditation trials for this user!
+	init_trials(user_id=result.inserted_id)
 
 	return result 
 
@@ -157,14 +146,14 @@ def register_user_experiment(name, email, timezone, exp_name, condition1, nTrial
 	return True
 
 
-def init_trials(user_id, experiment_id):
+def init_trials(user_id, experiment_id=None):
 	""" Initialises all the trials for an experiment for a user, reading a document in the 'experiments' database and populating the 'trials' collection.
 
 	This assumes that the experiment already exists in the database, and simply reads out the experiments and makes sure all reminders are set, timezones are corrected for,
 	and order of conditions is randomised
 	Inputs
 		user_id 		string, not an ObjectId
-		experiment_id 	string, not an ObjectId
+		experiment_id 	string, not an ObjectId. If not given, creates new 'meditation' and uses that
 
 	Returns
 		input_result	array of insert results
@@ -172,10 +161,16 @@ def init_trials(user_id, experiment_id):
 	# get a handle to the users collection and experiments collection
 	client, db_handle, users_coll = open_connection(collectionName='users')
 	experiments_coll = db_handle['experiments']
+	# get information about the experiment and store it into the variable
+	if not experiment_id: # exp not given
+		# init new meditation exp
+		_id = init_experiment_meditation().inserted_id
+		exp = experiments_coll.find_one({'_id': _id})	
+	else:
+		exp = experiments_coll.find_one({"_id": ObjectId(experiment_id)})
 	# get information about the user and store it into variable using next()
 	user = users_coll.find_one({"_id": ObjectId(user_id)})
-	# get information about the experiment and store it into the variable using next()
-	exp = experiments_coll.find_one({"_id": ObjectId(experiment_id)})
+	
 	# create an array of all the condition strings
 	condition_array = []
 	for ix, con in enumerate(exp["conditions"]): # iterate over each condition in the experiment
@@ -228,7 +223,7 @@ def init_trials(user_id, experiment_id):
 			'created_at': datetime.datetime.utcnow(),
 			'last_modified': datetime.datetime.utcnow(),
 			'random_number': np.random.random(),
-			'hash_sha256': hashlib.sha256(user_id+experiment_id+str(ix)+str(np.random.random())).hexdigest() # add a random hash, because if you don't add the np.random.random() then the same user doing experiment twice will go messed up
+			'hash_sha256': hashlib.sha256(str(np.random.random())).hexdigest() # add a random hash, because if you don't add the np.random.random() then the same user doing experiment twice will go messed up
 		}))
 	return insert_result
 		
@@ -366,7 +361,7 @@ def get_uncompleted_response_prompts(include_past=True, include_future=False, so
 		datesearch = {'response_date': right_now}
 	# update original query with additional constraints on what documents to return
 	response_query = {'response_request_sent': False}
-	# response_query.update(datesearch)
+	response_query.update(datesearch)
 	# set sort
 	if sort == 'chronological':
 		sort_as = pymongo.ASCENDING

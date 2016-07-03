@@ -26,5 +26,4 @@ settings.configure()
 message.send()
 
 # write to database
-db_utils.store_user(name=sys.argv[1], email=sys.argv[2])	
-db_utils.init_trials(name=sys.argv[1], email=sys.argv[2])	
+db_utils.store_user(name=sys.argv[1], email=sys.argv[2])
