@@ -13,7 +13,7 @@ def ProbeEmail(userName,userEmail,trialHash):
 	"""
 
 	mostofpath= """<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=""" + trialHash + "&rating="
-	restofpath= """><img src="https://zapscience.herokuapp.com/star.png"></a>"""
+	restofpath= """><img src="https://zapscience.herokuapp.com/views/star.png"></a>"""
 	bodyText = "<html><body> Sup. How'd it go?<br>" +\
 		mostofpath + "1\""  + restofpath +\
 		mostofpath + "2\""  + restofpath +\

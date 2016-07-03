@@ -2,8 +2,6 @@
 # This supercedes the template archyEmail.py
 
 import os
-import sys
-import logging
 from postmark import PMMail
 from django.conf import settings
 
@@ -13,7 +11,6 @@ def confirm_signup_meditation(name="Tester", email="a@deberker.com"):
 
 	"""
 	message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
-		#,'4322111a-0d75-4777-8111-2d83f0664762'
 	                 subject = "Welcome to Causali!" ,
 	                 sender = "a@deberker.com",
 	                 to = email,

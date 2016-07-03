@@ -13,14 +13,17 @@ print(name, email)
 # store the user
 user = db.store_user(name, email)
 user_id = user.inserted_id
+print("Inserted user: %s" % user_id)
 
 # initalise a new version of the experiment. Not ideal but works for now. (should just have one instance of the experiment which everyone signs up to, but I'm not sure how to hardcode that experiment in reliably.)
 exp = db.init_experiment_meditation()
 exp_id = exp.inserted_id
+print("Inserted experiment: %s" % exp_id)
 
 # initialise trials
 trials = db.init_trials(user_id, exp_id)
 trial_ids = [str(trials.inserted_id) for foo in trials]
+print("Inserted trials. First trial id: %s" % trial_ids[0])
 
 # send an email to the user 
 confirm_signup_meditation(name, email)

@@ -16,8 +16,7 @@ from itertools import groupby
 
 
 # find the database URI. If not available in the environment, use local mongodb host
-# URI = os.getenv('MONGO_URI', 'mongodb://localhost')
-URI = 'mongodb://peter:test@ds011943.mlab.com:11943/zapscience' # FOR DEV ONLY
+URI = os.getenv('MONGO_URI', 'mongodb://localhost')
 
 # function definitions that can be used by other scripts
 def open_connection(URI=URI, db='zapscience', collectionName='users'):
@@ -400,11 +399,14 @@ def store_response(trial_hash, response):
 def send_outstanding_response_prompts():
 	"""Uses get_uncompleted_response_prompts() to get to-do list, then sends emails.
 
+	Returns number of emails sent
+
 	"""
 	outstanding = get_uncompleted_response_prompts(include_past=True, include_future=False)
 	if not outstanding: # if list is empty
 		print("no outstanding response prompts")
 		return None
+	print("number of outstanding response prompts: %d" % len(outstanding))
 
 	client, db_handle, users_coll = open_connection(collectionName='users')
 	trials_coll = db_handle["trials"]
@@ -413,8 +415,6 @@ def send_outstanding_response_prompts():
 		# get the user
 		user = users_coll.find_one({'_id': ObjectId(prompt['user_id'])})
 		result = ProbeEmail.ProbeEmail(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
-		# TO DO check that result is correct and only continue if correct
-		#################
 
 		# store that instruction is sent, set the time instruction was sent, and update last_modified
 		trials_coll.update_one({"_id": prompt["_id"]}, {
@@ -428,6 +428,7 @@ def send_outstanding_response_prompts():
 		})
 
 
+
 def send_outstanding_instructions():
 	"""Uses get_uncompleted_response_prompts() to get to-do list, then sends emails.
 
@@ -436,6 +437,7 @@ def send_outstanding_instructions():
 	if not outstanding: # if list is empty
 		print("no outstanding instructions")
 		return None
+	print("number of outstanding instructions: %d" % len(outstanding))
 
 	client, db_handle, users_coll = open_connection(collectionName='users')
 	trials_coll = db_handle["trials"]

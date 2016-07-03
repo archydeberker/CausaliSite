@@ -5,11 +5,9 @@
 """
 print("Running scheduled_job.py")
 import os
-try:
-	import database.db_utils as db_utils
-except:
-	import db_utils
-
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.join(os.path.realpath(__file__))), os.pardir)))
+import db_utils
 
 
 db_utils.send_outstanding_instructions()
