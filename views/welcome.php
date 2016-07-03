@@ -14,11 +14,11 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 $name = $_POST["inputName"];
 $email = $_POST["inputEmail"];
 // default name
-//$name = "Prof"
+//$name = "Prof";
 
 // sanitise input
-$name_clean = filter_var($name, FILTER_SANITIZE_STRING)
-$email_clean = filter_var($email, FILTER_SANITIZE_EMAIL)
+$name_clean = filter_var($name, FILTER_SANITIZE_STRING);
+$email_clean = filter_var($email, FILTER_SANITIZE_EMAIL);
 
 exec("python ../database/signup_meditation.py $name_clean $email_clean");
 ?>
