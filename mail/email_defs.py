@@ -37,15 +37,15 @@ def probe_meditation(userName,userEmail,trialHash):
 		result 		should contain info about whether message was successfully sent. Not sure what is in it
 	"""
 
-	mostofpath= """<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=""" + trialHash + "&rating="
-	restofpath= """><img src="https://zapscience.herokuapp.com/views/star.png"></a>"""
-	bodyText = "<html><body> Sup. How are you feeling today?<br>" +\
-		mostofpath + "1\""  + restofpath +\
-		mostofpath + "2\""  + restofpath +\
-		mostofpath + "3\""  + restofpath +\
-		mostofpath + "4\""  + restofpath +\
-		mostofpath + "5\""  + restofpath + 
-		"<br><p>Warmly,<br><br>Your friends at Causali</p>" +
+	mostofpath= '<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=' + trialHash + '&rating='
+	restofpath= '><img src="https://zapscience.herokuapp.com/views/star.png"></a>'
+	bodyText = '<html><body> Hi there, how are you feeling today?<br>' +\
+		mostofpath + '1"'  + restofpath +\
+		mostofpath + '2"'  + restofpath +\
+		mostofpath + '3"'  + restofpath +\
+		mostofpath + '4"'  + restofpath +\
+		mostofpath + '5"'  + restofpath +\ 
+		"<br><p>Warmly,<br><br>Your friends at Causali</p>" +\
 		"</body> </html>"
 
 	#print bodyText
