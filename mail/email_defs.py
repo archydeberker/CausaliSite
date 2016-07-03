@@ -39,7 +39,7 @@ def probe_meditation(userName,userEmail,trialHash):
 
 	mostofpath= '<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=' + trialHash + '&rating='
 	restofpath= '><img src="https://zapscience.herokuapp.com/views/star.png"></a>'
-	bodyText = '<html><body> Hi there, how are you feeling today?<br>' +\
+	bodyText = ('<html><body> Hi %s,<br><br>It''s time to report back how you''ve been feeling today.<br>' % userName) +\
 		mostofpath + '1"'  + restofpath +\
 		mostofpath + '2"'  + restofpath +\
 		mostofpath + '3"'  + restofpath +\
@@ -74,7 +74,7 @@ def instruct_meditation(userName,userEmail,condition):
 
 	message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
 		#,'4322111a-0d75-4777-8111-2d83f0664762'
-	                 subject = userName + ", how are you feeling?" ,
+	                 subject = userName + ", today's the day for SCIENCE!" ,
 	                 sender = "a@deberker.com",
 	                 to = userEmail,
 	                 html_body = """
@@ -84,7 +84,7 @@ def instruct_meditation(userName,userEmail,condition):
 	                 <p><br>Warmly,</p>
 	                 <p>The Causali team</p>
 	                 """ % (userName, condition.upper()),
-	                 tag = "response")
+	                 tag = "instruction")
 
 	result = message.send()
 	return result
