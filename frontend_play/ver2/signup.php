@@ -37,9 +37,9 @@
 
         <h4> Your details </h4>
         <!--<label for="inputName" class="sr-only">Name</label>-->
-        <input type="text" name="inputName" class="form-control" placeholder="Name" required autofocus>
+        <input type="text" id="inputEmail" name="inputName" class="form-control" placeholder="Name" required autofocus>
         <!--<label for="inputEmail" class="sr-only">Email Address</label>-->
-        <input type="email" name="inputEmail" class="form-control" placeholder="Email address" required>
+        <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" required>
         <!--<label for="inputPassword" class="sr-only">Choose A Password</label>-->
         <!--<input type="password" id="inputPassword" class="form-control" placeholder="Choose A Password" required autofocus>-->
         <br>

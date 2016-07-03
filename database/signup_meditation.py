@@ -8,6 +8,7 @@ from SignUpConfirmEmail import confirm_signup_meditation
 
 name = sys.argv[1]
 email = sys.argv[2]
+print(name, email)
 
 # store the user
 user = db.store_user(name, email)
