@@ -1,3 +1,6 @@
+<!-- include google analytics code -->
+<?php include_once("analyticstracking.php") ?>
+<!-- menu bar -->
 <nav>
     <ul class="nav nav-pills pull-right">
        <li role="presentation" <?php if ($thisPage=="index") 

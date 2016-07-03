@@ -18,7 +18,7 @@
   $name_clean = filter_var($name, FILTER_SANITIZE_STRING);
   $email_clean = filter_var($email, FILTER_SANITIZE_EMAIL);
 
-  exec("python ../database/signup_meditation.py $name_clean $email_clean");
+  exec("python database/signup_meditation.py $name_clean $email_clean");
   ?>
 
     <div class="container">
@@ -31,7 +31,7 @@
 
     <div class="jumbotron">
       <h1> </h1>
-      <p class="lead">Welcome on board, <?php echo $name; ?>!</p>
+      <p class="lead">Welcome aboard, <?php echo $name; ?>!</p>
       <p class="center">Your email address is: <?php echo $email; ?></p>
       <p class="center">We have sent you a confirmation email. Tomorrow is your first day on the experiment, we hope you enjoy!</p>
     </div>
