@@ -7,7 +7,7 @@ import logging
 from postmark import PMMail
 from django.conf import settings
 
-def confirm_signup_meditation(name="Tester", email="a@deberker.com")
+def confirm_signup_meditation(name="Tester", email="a@deberker.com"):
 	"""Sends a welcome message to a user.
 	Called by signup_meditation.py. Make sure to use a valid email address, otherwise Postmark gets angry.
 
