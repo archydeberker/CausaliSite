@@ -11,8 +11,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 <body>
 <!-- PHP bit to store data and send email -->
 <?php
-$name = $_POST["inputName"];
+//$name = $_POST["inputName"];
 $email = $_POST["inputEmail"];
+// default name
+$name = "Prof"
 
 // sanitise input
 $name_clean = filter_var($name, FILTER_SANITIZE_STRING)
