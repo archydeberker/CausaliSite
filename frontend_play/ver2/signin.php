@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     
-  <?php $thisPage="signin"; ?>
+  <?php $thisPage="index"; ?>
   <?php include_once('assetHeader.php') ?>
   </head>
 
@@ -10,13 +10,7 @@
 
     <div class="container">
       <div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-              <li role="presentation" class="active"><a href="experiments.html">My Lab</a></li>
-              <li role="presentation"><a href="about.html">About Causali</a></li>
-              <li role="presentation"><a href="contact.html">Contact</a></li>
-          </ul>
-        </nav>
+        <?php include_once('header.php') ?>
         <h3 class="text-muted">Causali</h3>
       </div>
 
@@ -24,13 +18,9 @@
         <h2 class="form-signin-heading" align="center">Sign in to Causali</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
-        </div>
+        <!--<label for="inputPassword" class="sr-only">Password</label>-->
+        <!--<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>-->
+        <br>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       </form>
 
