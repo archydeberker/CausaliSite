@@ -4,7 +4,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.join(os.path.realpath(__file__))), os.pardir)))
 import db_utils as db
-from mail.SignUpConfirmEmail import confirm_signup_meditation
+from mail.email_defs import confirm_signup_meditation
 
 name = sys.argv[1]
 email = sys.argv[2]

@@ -8,7 +8,7 @@ import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
 import numpy as np
 import hashlib
-import mail.ProbeEmail as ProbeEmail
+import mail.email_defs as email_defs
 import pandas as pd
 from itertools import groupby
 
@@ -414,7 +414,7 @@ def send_outstanding_response_prompts():
 	for prompt in outstanding:
 		# get the user
 		user = users_coll.find_one({'_id': ObjectId(prompt['user_id'])})
-		result = ProbeEmail.ProbeEmail(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
+		result = email_defs.probe_meditation(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'])
 
 		# store that instruction is sent, set the time instruction was sent, and update last_modified
 		trials_coll.update_one({"_id": prompt["_id"]}, {
@@ -445,7 +445,7 @@ def send_outstanding_instructions():
 	for prompt in outstanding:
 		# get the user
 		user = users_coll.find_one({"_id": prompt['user_id']})
-		INSTRUCTION_EMAIL_FUNCTION_DOES_NOT_EXIST_YET(trialHash=prompt['hash_sha256'], userName=user['first_name'], userEmail=user['email'], condition=prompt['condition'])
+		email_defs.instruct_meditation(userName=user['first_name'], userEmail=user['email'], condition=prompt['condition'])
 		# store in the trials collection that the instruction has been sent and exact datetime
 		trials_coll.update_one({"_id": prompt["_id"]}, {
 			"$set": {
