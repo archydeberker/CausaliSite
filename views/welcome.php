@@ -29,16 +29,12 @@ exec("python ../database/signup_meditation.py $name_clean $email_clean");
 		<?php include 'header.php'; ?>
 	</div>
 
-
-
-
 	<!-- Content -->
   	<div class="page-content center padding-64">
-	    <h2 class="wide">ZAP science</h2>
-	    <p class="center">Welcome <?php echo $_POST["name"]; ?></p>
-		<p class="center">Your email address is: <?php echo $_POST["email"]; ?></p>
+	    <h2 class="wide">Causali</h2>
+	    <p class="center">Welcome <?php echo $name; ?></p>
+		<p class="center">Your email address is: <?php echo $email; ?></p>
 		<p class="center">We have sent you a confirmation email. Tomorrow you will start the experiment.</p>
-
   	</div>
 
 
