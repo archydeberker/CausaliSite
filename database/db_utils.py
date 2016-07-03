@@ -19,7 +19,7 @@ from itertools import groupby
 URI = os.getenv('MONGO_URI', 'mongodb://localhost')
 
 # function definitions that can be used by other scripts
-def open_connection(URI=URI, db='zapscience', collectionName='users'):
+def open_connection(URI=URI, db='causali', collectionName='users'):
 	""" Opens connection and returns connection details
 	Inputs
 		URI 			server to connect to (includes credentials)
