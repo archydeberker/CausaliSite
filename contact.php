@@ -2,7 +2,7 @@
 <html lang="en">
   <head> 
     <?php $thisPage="contact"; ?>
-     <?php include_once('../ver2/assetHeader.php') ?>
+     <?php include_once('assetHeader.php') ?>
 
   </head>
 
@@ -16,14 +16,11 @@
         </p>
       </div>
     
+    <div class='jumbotron'>
+    <p class='lead'> Thoughts, comments, criticism? </p>
     <a href="mailto:zapscience@gmail.com"> <h4 class="sub-header">Email us</h4> </a>
     <span class="glyphicon glyphicon-envelope" float="right"></span> 
-    
-
-    <a href="mailto:zapscience@gmail.com"> <h4 class="sub-header">Send us some money</h4> </a>
-     <span class="glyphicon glyphicon-gbp" float="right"></span> 
-    
-    
+    </div>
 
       <footer class="footer">
         <p>&copy; 2016 Causali, Inc.</p>
