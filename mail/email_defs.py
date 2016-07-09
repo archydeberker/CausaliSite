@@ -39,11 +39,11 @@ def probe_meditation(userName,userEmail,trialHash):
 
 	resp = '<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=' + trialHash + '&rating=%(rating)d"><img src="http://www.petersmittenaar.com/media/rating%(rating)d.png"></a>'
 	bodyText = "<html><body> Hi %s,<br><br>It''s time to report back how you''ve been feeling today.<br>" % userName +
-		"resp" % {'rating': 1} + 
-		"resp" % {'rating': 2} + 
-		"resp" % {'rating': 3} + 
-		"resp" % {'rating': 4} + 
-		"resp" % {'rating': 5} + 
+		resp % {'rating': 1} + 
+		resp % {'rating': 2} + 
+		resp % {'rating': 3} + 
+		resp % {'rating': 4} + 
+		resp % {'rating': 5} + 
 		"<br><p>Warmly,<br><br>Your friends at Causali</p></body></html>"
 
 	message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
