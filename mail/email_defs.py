@@ -37,18 +37,14 @@ def probe_meditation(userName,userEmail,trialHash):
 		result 		should contain info about whether message was successfully sent. Not sure what is in it
 	"""
 
-	mostofpath= '<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=' + trialHash + '&rating='
-	restofpath= '><img src="https://zapscience.herokuapp.com/views/star.png"></a>'
-	bodyText = ('<html><body> Hi %s,<br><br>It''s time to report back how you''ve been feeling today.<br>' % userName) +\
-		mostofpath + '1"'  + restofpath +\
-		mostofpath + '2"'  + restofpath +\
-		mostofpath + '3"'  + restofpath +\
-		mostofpath + '4"'  + restofpath +\
-		mostofpath + '5"'  + restofpath +\
-		"<br><p>Warmly,<br><br>Your friends at Causali</p>" +\
-		"</body> </html>"
-
-	#print bodyText
+	resp = '<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=' + trialHash + '&rating=%(rating)d"><img src="http://www.petersmittenaar.com/media/rating%(rating)d.png"></a>'
+	bodyText = "<html><body> Hi %s,<br><br>It''s time to report back how you''ve been feeling today.<br>" % userName +
+		"resp" % {'rating': 1} + 
+		"resp" % {'rating': 2} + 
+		"resp" % {'rating': 3} + 
+		"resp" % {'rating': 4} + 
+		"resp" % {'rating': 5} + 
+		"<br><p>Warmly,<br><br>Your friends at Causali</p></body></html>"
 
 	message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
 		#,'4322111a-0d75-4777-8111-2d83f0664762'
@@ -74,7 +70,7 @@ def instruct_meditation(userName,userEmail,condition):
 
 	message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
 		#,'4322111a-0d75-4777-8111-2d83f0664762'
-	                 subject = userName + ", today's the day for SCIENCE!" ,
+	                 subject = userName + ", today you should: %s" condition.upper(),
 	                 sender = "a@deberker.com",
 	                 to = userEmail,
 	                 html_body = """
