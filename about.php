@@ -11,9 +11,6 @@
     <div class="container">
       <div class="header clearfix">
       <?php include_once('header.php') ?>
-      <p>
-        <h3 class="text-muted">Causali</h3>
-        </p>
       </div>
     
     <h3 class="sub-header">Why is Causali better than everything else?</h3>

@@ -1,4 +1,20 @@
 /* Space out content a bit */
+
+.navbar-default {
+  background-color: #ffffff;
+    border-color: #E7E7E7;
+}
+
+/* title */
+.navbar-default .navbar-brand {
+    color: #000000;
+}
+
+
+/*Used for CTA button on home page */
+.multi-line-button { 
+  white-space: normal; }
+
 .glyphicon {
   font-size: 30px;
 }

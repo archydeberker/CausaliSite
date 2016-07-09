@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     
-  <?php $thisPage="index"; ?>
+  <?php $thisPage="mylab"; ?>
   <?php include_once('assetHeader.php') ?>
   </head>
 
@@ -11,11 +11,17 @@
     <div class="container">
       <div class="header clearfix">
         <?php include_once('header.php') ?>
-        <h3 class="text-muted">Causali</h3>
+        
       </div>
 
+      <div class="jumbotron"><p class="lead"> We are working on an online sign-in system and dashboard.</p>
+
+      <p class="lead">At present, to view your results you can enter your email address here to be sent a link to them.</p></div>
+
+      <div class="col-lg-6 col-lg-offset-3" >
       <form class="form-signin">
-        <h2 class="form-signin-heading" align="center">Sign in to Causali</h2>
+        <h3 class="form-signin-heading" align="center">Send me my results!</h3>
+
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
         <!--<label for="inputPassword" class="sr-only">Password</label>-->
@@ -27,6 +33,7 @@
       <footer class="footer">
         <p>&copy; 2016 Causali, Inc.</p>
       </footer>
+    </div>
 
     </div> <!-- /container -->
 

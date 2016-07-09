@@ -25,7 +25,6 @@
       <div class="container">
         <div class="header clearfix">
           <?php include_once('header.php') ?>
-          <h3 class="text-muted">Causali</h3>
         </div>
         <div class='jumbotron'> <p class="lead"> This experiment is going to help you figure out whether meditating makes you calmer. </div></p>
       <form class="form-signin" action="./welcome.php" method="post">
