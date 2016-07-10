@@ -27,7 +27,7 @@ echo " class='active'";  ?>><a href="contact.php">Contact</a></li>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand"href="#"><img alt="Brand" src="frontend_play/assets/logo10_big.tiff"  style="width:100px" ></a>
+      <a class="navbar-brand" href="#"><img alt="Brand" src="frontend_play/assets/logo10_big.tiff"  style="width:100px" ></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
