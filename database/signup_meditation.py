@@ -16,7 +16,7 @@ user_id = user.inserted_id
 print("Inserted user: %s" % user_id)
 
 # initalise a new version of the experiment. Not ideal but works for now. (should just have one instance of the experiment which everyone signs up to, but I'm not sure how to hardcode that experiment in reliably.)
-exp = db.init_experiment_meditation()
+exp = db.init_experiment_meditation(user_id)
 exp_id = exp.inserted_id
 print("Inserted experiment: %s" % exp_id)
 

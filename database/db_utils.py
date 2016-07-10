@@ -71,7 +71,8 @@ def store_user(name, email, timezone=0):
 		'created_at': datetime.datetime.utcnow(),
 		'last_modified': datetime.datetime.utcnow(),
 		'timezone': timezone,
-		'first_name': name.partition(' ')[0] # get the first part of the name until a space (or whole thing if no space)
+		'first_name': name.partition(' ')[0], # get the first part of the name until a space (or whole thing if no space)
+		'subscribed': True  # whether the user is active/subscribed
 		})
 
 
@@ -268,8 +269,8 @@ def store_experiment(exp_name=['My Experiment'], conditions=['condition1', 'cond
 	return insert_result
 
 
-def init_experiment_meditation():
-	""" temporary code to initialise the meditation experiment in the database. Helpful to identify what variables to store and how to name them
+def init_experiment_meditation(user):
+	""" Code to initialise the meditation experiment in the database. Helpful to identify what variables to store and how to name them
 	
 	Returns an instance of pymongo InsertOneResult, e.g. insert_result.inserted_id 
 	to get the ID of inserted document
@@ -286,6 +287,7 @@ def init_experiment_meditation():
 		'response_prompt': 15, #time of day in hours between 0 and 24
 		'ITI': 24, # set the ITI between trials in hours
 		'randomise': 'max3', #how to randomise; see init_trials() for implementation
+		'user_id': user,
 		'created_at': datetime.datetime.utcnow(),
 		'last_modified': datetime.datetime.utcnow(),
 	})
@@ -426,7 +428,6 @@ def send_outstanding_response_prompts():
 				"last_modified": True
 			}
 		})
-
 
 
 def send_outstanding_instructions():
@@ -583,6 +584,41 @@ def delete_result(_id):
 	"""
 	_, _, coll = open_connection(collectionName='results')
 	return coll.delete_one({'_id': ObjectId(_id)})
+
+
+def unsubscribe_user(email):
+	""" Remove outstanding trials and tag user as unsubscribed.
+
+	If a user is registered for multiple experiment 
+	"""
+	# find all trials for this user across all experiments and delete them
+	# Specifically, find all trials with outstanding response prompts
+	client, db, coll = open_connection(collectionName='users')
+	user_docs = list(coll.find({'email': email}))
+	if not user_docs:
+		print("no user found with this email address")
+		email_defs.alert_zap(info="User with email %s tried to unsubscribe but when looking for the user in our database, I couldn't find them. Maybe look for them manually before they get pissed off for receiving more emails." % email)
+		return(None)
+	# assume user was found. Could be multiple signups under the same email, so get all user ids
+	user_ids = [doc['_id'] for doc in user_docs]
+	# delete all trials associated with one of the user_ids, and have not had their response request sent
+	db['trials'].delete_many({
+		'user_id': {'$in': user_ids}, 
+		'response_request_sent': False
+	})
+
+	# change the user to 'unsubscribed' and add date at which it happened
+	coll.update_many({'email': email}, {
+		'$set': {
+			'subscribed': False
+		},
+		"$currentDate": {
+			'last_modified': True,
+			'unsubscribe_date': True, 
+		}
+	})
+
+
 
 
 # References
