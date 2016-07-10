@@ -71,7 +71,8 @@ def store_user(name, email, timezone=0):
 		'created_at': datetime.datetime.utcnow(),
 		'last_modified': datetime.datetime.utcnow(),
 		'timezone': timezone,
-		'first_name': name.partition(' ')[0] # get the first part of the name until a space (or whole thing if no space)
+		'first_name': name.partition(' ')[0], # get the first part of the name until a space (or whole thing if no space)
+		'subscribed': True  # whether the user is active/subscribed
 		})
 
 
@@ -428,7 +429,6 @@ def send_outstanding_response_prompts():
 		})
 
 
-
 def send_outstanding_instructions():
 	"""Uses get_uncompleted_response_prompts() to get to-do list, then sends emails.
 
@@ -583,6 +583,39 @@ def delete_result(_id):
 	"""
 	_, _, coll = open_connection(collectionName='results')
 	return coll.delete_one({'_id': ObjectId(_id)})
+
+
+def unsubscribe_user(email=email):
+	""" Remove outstanding trials and tag user as unsubscribed.
+
+	If a user is registered for multiple experiment 
+	"""
+	# find all trials for this user across all experiments and delete them
+	# Specifically, find all trials with outstanding response prompts
+	client, db, coll = open_connection(collectionName='users')
+	user_docs = list(coll.find({'email': email}))
+	if not user_docs:
+		print("no user found with this email address")
+		email_defs.alert_zap(info="User with email %s tried to unsubscribe but when looking for the user in our database, I couldn't find them. Maybe look for them manually before they get pissed off for receiving more emails." % email)
+	# assume user was found
+	user_ids = [str(doc['_id']) for doc in user_docs]
+	result = outstandingResponses = db['trials'].delete_many({
+		'user_id': {'$in': user_ids}, 
+		'response_request_sent': False
+	})
+
+	# change the user to 'unsubscribed' and add date at which it happened
+	coll.update_many({'email': email}, {
+		'$set': {
+			'subscribed': False
+		},
+		"$currentDate": {
+			'last_modified': True,
+			'unsubscribe_date': True, 
+		}
+	})
+
+
 
 
 # References

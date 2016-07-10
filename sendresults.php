@@ -8,33 +8,32 @@
 
 <body>
 
-<!-- PHP stuff to send rating -->
-<?php
-// Send
-$temp1 = $_GET["trialhash"];
-$temp2 = $_GET["rating"];
-exec("python database/store_response.py $temp1 $temp2");
-?>
+	<!-- PHP stuff to send rating -->
+	<?php
+	// Send
+	$temp1 = $_GET["trialhash"];
+	$temp2 = $_GET["rating"];
+	exec("python database/store_response.py $temp1 $temp2");
+	?>
 
-<div class="container">
-    <div class="header clearfix">
-      <?php include_once('header.php') ?>
-      <p>
-        <h3 class="text-muted" ">Causali</h3> 
-      </p>
-    </div>
+	<div class="container">
+		<div class="header clearfix">
+		  <?php include_once('header.php') ?>
+		  <p>
+		    <h3 class="text-muted" ">Causali</h3> 
+		  </p>
+		</div>
 
-    <div class="jumbotron">
-      <h1> </h1>
-      <p class="lead">Thanks for submitting your response!</p>
-    </div>
+		<div class="jumbotron">
+		  <h1> </h1>
+		  <p class="lead">Thanks for submitting your response!</p>
+		</div>
 
+		<footer class="footer">
+		  <p>&copy; 2016 Causali, Inc.</p>
+		</footer>
 
-    <footer class="footer">
-      <p>&copy; 2016 Causali, Inc.</p>
-    </footer>
-
-  </div> <!-- /container -->
+	</div> <!-- /container -->
 
 </body>
 </html>
