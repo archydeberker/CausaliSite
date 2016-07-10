@@ -6,7 +6,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.join(os.pat
 import db_utils as db
 
 trialHash = sys.argv[1]
-rating = sys.argv[2]
+try:
+	rating = int(sys.argv[2])
+except ValueError:
+	rating = -99999
 
 print("trialHash: %s. Rating: %d" % (trialHash, rating))
 
