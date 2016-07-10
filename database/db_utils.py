@@ -585,7 +585,7 @@ def delete_result(_id):
 	return coll.delete_one({'_id': ObjectId(_id)})
 
 
-def unsubscribe_user(email=email):
+def unsubscribe_user(email):
 	""" Remove outstanding trials and tag user as unsubscribed.
 
 	If a user is registered for multiple experiment 
