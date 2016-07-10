@@ -26,7 +26,7 @@ def confirm_signup_meditation(name="Tester", email="a@deberker.com"):
 	result = message.send()
 	return result
 
-def probe_meditation(userName,userEmail,trialHash):
+def probe_meditation(userName, userEmail, trialHash):
 	"""sends a probe email to a specified user using a trial hash.
 
 	Inputs
@@ -38,12 +38,12 @@ def probe_meditation(userName,userEmail,trialHash):
 	"""
 
 	resp = '<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=' + trialHash + '&rating=%(rating)d"><img src="http://www.petersmittenaar.com/media/rating%(rating)d.png"></a>'
-	bodyText = "<html><body> Hi %s,<br><br>It''s time to report back how you''ve been feeling today.<br>" % userName +
-		resp % {'rating': 1} + 
-		resp % {'rating': 2} + 
-		resp % {'rating': 3} + 
-		resp % {'rating': 4} + 
-		resp % {'rating': 5} + 
+	bodyText = "<html><body> Hi %s,<br><br>It''s time to report back how you''ve been feeling today.<br>" % userName + \
+		resp % {'rating': 1} + \
+		resp % {'rating': 2} + \
+		resp % {'rating': 3} + \
+		resp % {'rating': 4} + \
+		resp % {'rating': 5} + \
 		"<br><p>Warmly,<br><br>Your friends at Causali</p></body></html>"
 
 	message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
@@ -57,7 +57,7 @@ def probe_meditation(userName,userEmail,trialHash):
 	result = message.send()
 	return result
 
-def instruct_meditation(userName,userEmail,condition):
+def instruct_meditation(userName, userEmail, condition):
 	"""Instructs a user to do condition.
 
 	Inputs
@@ -70,7 +70,7 @@ def instruct_meditation(userName,userEmail,condition):
 
 	message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
 		#,'4322111a-0d75-4777-8111-2d83f0664762'
-	                 subject = userName + ", today you should: %s" condition.upper(),
+	                 subject = "%s, today you should: %s" % (userName, condition.upper()),
 	                 sender = "a@deberker.com",
 	                 to = userEmail,
 	                 html_body = """
