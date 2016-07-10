@@ -598,9 +598,10 @@ def unsubscribe_user(email):
 		print("no user found with this email address")
 		email_defs.alert_zap(info="User with email %s tried to unsubscribe but when looking for the user in our database, I couldn't find them. Maybe look for them manually before they get pissed off for receiving more emails." % email)
 		return(None)
-	# assume user was found
+	# assume user was found. Could be multiple signups under the same email, so get all user ids
 	user_ids = [doc['_id'] for doc in user_docs]
-	result = outstandingResponses = db['trials'].delete_many({
+	# delete all trials associated with one of the user_ids, and have not had their response request sent
+	db['trials'].delete_many({
 		'user_id': {'$in': user_ids}, 
 		'response_request_sent': False
 	})
