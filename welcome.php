@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <?php $thisPage="index"; ?>
-    <?php include_once('assetHeader.php') ?>
-  </head>
+<head>
+  <?php $thisPage="index"; ?>
+  <?php include_once('assetHeader.php') ?>
+</head>
 
   <body>
   <!-- PHP bit to store data and send email -->
@@ -21,9 +21,9 @@
   exec("python database/signup_meditation.py $name_clean $email_clean");
   ?>
 
-    <div class="container">
-      <div class="header clearfix">
-        <?php include_once('header.php') ?>
+  <div class="container">
+    <div class="header clearfix">
+      <?php include_once('header.php') ?>
       <p>
         <h3 class="text-muted" ">Causali</h3> 
       </p>
@@ -37,14 +37,13 @@
     </div>
 
 
-  <footer class="footer">
-    <p>&copy; 2016 Causali, Inc.</p>
-  </footer>
+    <footer class="footer">
+      <p>&copy; 2016 Causali, Inc.</p>
+    </footer>
 
-</div> <!-- /container -->
-</div>
+  </div> <!-- /container -->
 
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="frontend_play/assets/js/ie10-viewport-bug-workaround.js"></script>
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="frontend_play/assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>
