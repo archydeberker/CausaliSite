@@ -18,9 +18,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 // Send
 $temp1 = $_GET["trialhash"];
 $temp2 = $_GET["rating"];
-// exec("python depositResults.py $temp1 $temp2");
-// this way we use the function in db_utils. HAS NOT BEEN TESTED
-exec('python -c "from database.db_utils import store_response; store_response($temp1, $temp2)"');
+exec("python database/store_response.py $temp1 $temp2");
 ?>
 
 <!-- Page content -->
