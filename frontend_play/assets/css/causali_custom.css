@@ -5,6 +5,12 @@
     border-color: #E7E7E7;
 }
 
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #ea5d00;
+}
+
+
 /* title */
 .navbar-default .navbar-brand {
     color: #000000;
