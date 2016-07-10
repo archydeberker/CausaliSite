@@ -26,9 +26,8 @@ exec('python -c "from database.db_utils import store_response; store_response($t
 <!-- Page content -->
 <div class="w3-content" style="max-width:1800px;margin-top:46px">
   <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px">
-    <h2 class="w3-wide">ZAP science</h2>
+    <h2 class="w3-wide">Causali</h2>
     <p class="w3-centered">Thanks for submitting your response, it's safely stored in our filedrawer.</p>
-    <a href="user_results.php" class="w3-centered">Go to my results</a>
     </div>
   </div>  
 <!-- End Page Content -->
