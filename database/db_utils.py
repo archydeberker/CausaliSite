@@ -269,8 +269,8 @@ def store_experiment(exp_name=['My Experiment'], conditions=['condition1', 'cond
 	return insert_result
 
 
-def init_experiment_meditation():
-	""" temporary code to initialise the meditation experiment in the database. Helpful to identify what variables to store and how to name them
+def init_experiment_meditation(user):
+	""" Code to initialise the meditation experiment in the database. Helpful to identify what variables to store and how to name them
 	
 	Returns an instance of pymongo InsertOneResult, e.g. insert_result.inserted_id 
 	to get the ID of inserted document
@@ -287,6 +287,7 @@ def init_experiment_meditation():
 		'response_prompt': 15, #time of day in hours between 0 and 24
 		'ITI': 24, # set the ITI between trials in hours
 		'randomise': 'max3', #how to randomise; see init_trials() for implementation
+		'user_id': user,
 		'created_at': datetime.datetime.utcnow(),
 		'last_modified': datetime.datetime.utcnow(),
 	})
