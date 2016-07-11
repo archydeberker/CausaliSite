@@ -416,7 +416,7 @@ def send_outstanding_response_prompts():
 	for prompt in outstanding:
 		# get the user
 		user = users_coll.find_one({'_id': ObjectId(prompt['user_id'])})
-		result = email_defs.probe_meditation(trialHash=prompt['hash_sha256'], user=user['first_name'], email=user['email'])
+		result = email_defs.probe_meditation(trialHash=prompt['hash_sha256'], name=user['first_name'], email=user['email'])
 
 		# store that instruction is sent, set the time instruction was sent, and update last_modified
 		trials_coll.update_one({"_id": prompt["_id"]}, {
@@ -446,7 +446,7 @@ def send_outstanding_instructions():
 	for prompt in outstanding:
 		# get the user
 		user = users_coll.find_one({"_id": prompt['user_id']})
-		email_defs.instruct_meditation(user=user['first_name'], email=user['email'], condition=prompt['condition'])
+		email_defs.instruct_meditation(name=user['first_name'], email=user['email'], condition=prompt['condition'])
 		# store in the trials collection that the instruction has been sent and exact datetime
 		trials_coll.update_one({"_id": prompt["_id"]}, {
 			"$set": {
