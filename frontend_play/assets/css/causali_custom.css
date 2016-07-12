@@ -26,7 +26,6 @@
 }
 
 .input-group-archy {
-  padding: 6px 12px;
   font-size: 14px;
   font-weight: normal;
   line-height: 1;
@@ -35,6 +34,8 @@
   background-color: #bdc3c7;
   border: 2px solid #d35400;
   border-radius: 4px;
+  max-width: 200px;
+
 }
 .input-group-archy-2 {
   padding: 6px 12px;

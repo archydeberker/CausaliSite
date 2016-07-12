@@ -34,6 +34,8 @@
       <p class="lead">Welcome aboard, <?php echo $name; ?>!</p>
       <p class="center">Your email address is: <?php echo $email; ?></p>
       <p class="center">We have sent you a confirmation email. Tomorrow is your first day on the experiment, we hope you enjoy!</p>
+
+      <p> If you're looking to get started with guided meditations, check out <a href="https://www.headspace.com"> Headspace </a> for free 10-minute sessions</p>
     </div>
 
 
