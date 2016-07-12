@@ -43,13 +43,18 @@ def probe_meditation(name, email, trialHash):
 		result 		should contain info about whether message was successfully sent. Not sure what is in it
 	"""
 
-	resp = '<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=' + trialHash + '&rating=%(rating)d"><img src="http://www.petersmittenaar.com/media/rating%(rating)d.png"></a>'
+	resp 	= '<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=' + trialHash + '&rating=%(rating)d"><img src="http://www.petersmittenaar.com/media/rating%(rating)d.png"></a>'
+	noresp 	=  '<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=' + trialHash + '&rating=0"> click here to skip today </a><br>'
+
 	bodyText = "<html><body>Hi %s,<br><br>It''s time to report back how you''ve been feeling today.<br>" % name + \
 		resp % {'rating': 1} + \
 		resp % {'rating': 2} + \
 		resp % {'rating': 3} + \
 		resp % {'rating': 4} + \
 		resp % {'rating': 5} + \
+
+		noresp + \
+
 		"<br><p>Warmly,<br><br>Your friends at Causali</p>" + \
 		"<br><br>%s" % unsubscribe_string % {'email': email} + \
 		"</body></html>"
