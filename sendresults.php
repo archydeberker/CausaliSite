@@ -19,9 +19,7 @@
 	<div class="container">
 		<div class="header clearfix">
 		  <?php include_once('header.php') ?>
-		  <p>
-		    <h3 class="text-muted" ">Causali</h3> 
-		  </p>
+		 
 		</div>
 
 		<div class="jumbotron">
