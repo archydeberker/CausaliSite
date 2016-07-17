@@ -21,7 +21,7 @@ URI = os.getenv('MONGO_URI', 'mongodb://localhost')
 db = URI.split('/')[-1]
 
 # function definitions that can be used by other scripts
-def open_connection(URI=URI, db=db, collectionName):
+def open_connection(collectionName, URI=URI, db=db):
 	""" Opens connection and returns connection details
 	Inputs
 		URI 			server to connect to (includes credentials)
