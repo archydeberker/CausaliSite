@@ -17,9 +17,11 @@ from itertools import groupby
 
 # find the database URI. If not available in the environment, use local mongodb host
 URI = os.getenv('MONGO_URI', 'mongodb://localhost')
+# get the name of the database: either causali or causali-staging (or localhost).
+db = URI.split('/')[-1]
 
 # function definitions that can be used by other scripts
-def open_connection(URI=URI, db='causali', collectionName='users'):
+def open_connection(URI=URI, db=db, collectionName):
 	""" Opens connection and returns connection details
 	Inputs
 		URI 			server to connect to (includes credentials)
