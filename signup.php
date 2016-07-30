@@ -56,7 +56,7 @@
                 <p>What time would you like to receive your instruction email?</p>
 
                 <div class="input-group-archy">
-                  <input id="timepicker1" type="time" class="form-control input-small" value="07:00"> 
+                  <input name="instructionTime" type="time" class="form-control input-small" value="07:00"> 
                 </div>
               </div>
           </div>
@@ -73,7 +73,7 @@
                 <p>What time would you like to receive your response email?</p>
 
                 <div class="input-group-archy">
-                  <input id="timepicker2" type="time" class="form-control input-small" value="16:00">
+                  <input name="responseTime" type="time" class="form-control input-small" value="16:00">
               </div>
             </div>
           </div>
@@ -89,7 +89,7 @@
                 <h4 class="media-heading">Where are you in the world?</h4>
 
                 <div>
-                  <!-- <input id="timepicker2" type="text" class="form-control input-small" default-time="4.00 PM">  -->
+                  <!-- https://stackoverflow.com/questions/6921827/best-way-to-populate-a-select-box-with-timezones -->
                   <?php
                   function formatOffset($offset) {
                           $hours = $offset / 3600;

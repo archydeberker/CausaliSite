@@ -11,6 +11,7 @@ import hashlib
 import mail.email_defs as email_defs
 import pandas as pd
 from itertools import groupby
+import pytz
 
 
 
@@ -49,7 +50,7 @@ def close_connection(client):
 	client.close()
 
 
-def store_user(name, email, timezone=0):
+def store_user(name, email, instructionTime='07:00', responseTime='16:00', timezone='Europe/London'):
 	""" Store user info in a collection. 
 	As I understand it you don't have to sanitise inputs in MongoDB unless you're concatenating strings.
 	Instead of using the has we can use the objectID in the mongoDB database, which is unique. 
@@ -59,8 +60,6 @@ def store_user(name, email, timezone=0):
 	Input:
 		name 		string
 		email 		string
-		collection 	pymongo handle to collection, as provided by open_connection(). If not provided, opens connection using open_connection()
-		timezone 	number (int or float) indicating offset from UTC (should use proper timezone stuff [pytz] at some point, but too big a hassle for now)
 	Returns:
 		result 		contains unique id of user as insert_results.inserted_id
 	"""
@@ -70,6 +69,8 @@ def store_user(name, email, timezone=0):
 	result = collection.insert_one({
 		'name': name,
 		'email': email,
+		'instructionTime': pytz.utc.localize(datetime.datetime.strptime(instructionTime, '%H:%M').time()) # maybe I should convert these instantly to UTC
+		'responseTime': pytz.utc.localize(datetime.datetime.strptime(responseTime, '%H:%M').time())
 		'created_at': datetime.datetime.utcnow(),
 		'last_modified': datetime.datetime.utcnow(),
 		'timezone': timezone,

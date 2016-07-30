@@ -8,10 +8,14 @@ from mail.email_defs import confirm_signup_meditation
 
 name = sys.argv[1]
 email = sys.argv[2]
+instructionTime = sys.argv[3]
+responseTime = sys.argv[4]
+timezone = sys.argv[5]
+
 print(name, email)
 
 # store the user
-user = db.store_user(name, email)
+user = db.store_user(name, email, instructionTime, responseTime, timezone)
 user_id = user.inserted_id
 print("Inserted user: %s" % user_id)
 
