@@ -10,6 +10,7 @@ import numpy as np
 import hashlib
 import mail.email_defs as email_defs
 import pandas as pd
+import gviz_api
 from itertools import groupby
 
 
@@ -440,6 +441,7 @@ def send_outstanding_instructions():
 		})
 
 
+
 def trials_completed(filter={}):
 	"""Returns number of completed trials for a particular filter.
 
@@ -462,6 +464,50 @@ def trials_completed(filter={}):
 	query.update(filter)
 	# search and return the number of retrieved docs
 	return trials_collection.find(query).count()
+
+
+def get_results(experiment_id=[], user_id=[]):
+    """Updates every doc in the 'results' collection that fits the filter
+    
+    First finds all results that satisfy the filter, and then loops over them to update.
+    Filter might contain something like last_modified, a particular results _id, a user, experiment,
+    and so on. 
+
+    Input
+        results_filter         a filter passes directly to mongodb to select documents in the 'results' collection
+
+    """
+    client, db, trials_collection = open_connection(collectionName='trials')
+
+    # get all trials for this user and this experiment and put into a list
+    experiment_id = ObjectId('578bee08c209cf00a5b6e330')
+    user_id = ObjectId('578bee07c209cf00a5b6e32e')
+    trials = pd.DataFrame(list(trials_collection.find({
+        "experiment_id": experiment_id, 
+        "user_id": user_id
+    })))
+    # generate a list with as many np arrays as conditions (with non-NaN scores for that condition)
+    # This will make it easier to do things like std, mean, median, t-tests, f-tests
+    z = trials.groupby(by='condition')
+    zz = z['random_number'].mean()
+    table_description = {'condition': ('string', 'Condition'),
+                         'result': ('number', 'Happiness')}
+    pydic_data = [{'condition': 'Meditate', 'result': (zz[0], 'debug1')},
+                  {'condition': 'Not meditate', 'result': (zz[1], 'debug2')}]
+    g_datatable = gviz_api.DataTable(table_description)
+    g_datatable.LoadData(pydic_data)
+    return g_datatable.ToJSon()
+    
+
+    # resultsZ.n_completed = int(np.sum(trials.response_given))
+    # resultsZ.proportion_complete = float(np.sum(trials.response_given)/len(trials.index))
+    # resultsZ.response_rate = float(np.sum(trials.response_given)/np.sum(trials.response_request_sent))
+    # resultsZ.mean_score = float(np.nanmean(trials.trialRating))
+    # resultsZ.mean_score_per_condition = [np.mean(cond) for cond in dat]
+    # resultsZ.std_score_per_condition = [np.std(cond) for cond in dat]
+    # resultsZ.median_score_per_condition = [np.median(cond) for cond in dat]
+    # resultsZ.scores_per_condition = [list(cond) for cond in dat]
+    # resultsZ.Cohen_effect_size_0_minus_1 = (np.mean(dat[0])-np.mean(dat[1])) / np.sqrt(((len(dat[0])-1)*np.var(dat[0]) + (len(dat[1])-1)*np.var(dat[1])) /    (len(dat[0])+len(dat[1])))
 
 
 def delete_user(_id):
