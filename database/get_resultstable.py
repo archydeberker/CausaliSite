@@ -5,6 +5,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.join(os.path.realpath(__file__))), os.pardir)))
 import db_utils as db
 import pymongo
+from bson.objectid import ObjectId # to be able to query _id in mongo
 from mail.email_defs import confirm_signup_meditation
 
 experiment_id = sys.argv[1]
