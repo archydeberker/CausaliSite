@@ -3,6 +3,7 @@ import sys
 import os
 # this adds the zapscience folder so we dont have to deal with bs relative path issues
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.join(os.path.realpath(__file__))), os.pardir)))
+sys.path.append('/app/frontend_play/dist/google-visualization-python-master')
 import pymongo
 import datetime
 from bson.objectid import ObjectId # to be able to query _id in mongo
