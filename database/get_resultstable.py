@@ -12,4 +12,4 @@ experiment_id = sys.argv[1]
 user_id = sys.argv[2]
 
 
-db.get_results(ObjectId(experiment_id),ObjectId(user_id))
+print db.get_results(ObjectId(experiment_id),ObjectId(user_id))
