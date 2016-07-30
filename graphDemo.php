@@ -18,7 +18,7 @@
   $temp1 = '578bee08c209cf00a5b6e330';
   $temp2 = '578bee07c209cf00a5b6e32e';
   
-  exec("python database/get_resultstable.py $temp1 $temp2, %data_table"); 
+  exec("python database/get_resultstable.py $temp1 $temp2", $data_table); 
 
   ?>
 
