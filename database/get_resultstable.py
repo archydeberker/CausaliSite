@@ -10,9 +10,5 @@ from mail.email_defs import confirm_signup_meditation
 experiment_id = sys.argv[1]
 user_id = sys.argv[2]
 
-print(experiment_id, user_id)
 
 db.get_results(ObjectID(experiment_id),ObjectID(user_id)
-#
-
-print("Finished get_resultstable.py")
