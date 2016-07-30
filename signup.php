@@ -56,11 +56,8 @@
                 <p>What time would you like to receive your instruction email?</p>
 
                 <div class="input-group-archy">
-                  <input id="timepicker1" type="text" class="form-control input-small" default-time="7.00 AM"> 
+                  <input id="timepicker1" type="time" class="form-control input-small" value="07:00"> 
                 </div>
-                <script type="text/javascript">
-                  $('#timepicker1').timepicker({defaultTime: "7.00 AM"});
-                </script>
               </div>
           </div>
           
@@ -76,10 +73,7 @@
                 <p>What time would you like to receive your response email?</p>
 
                 <div class="input-group-archy">
-                  <input id="timepicker2" type="text" class="form-control input-small" default-time="4.00 PM"> 
-                  <script type="text/javascript">
-                    $('#timepicker2').timepicker({defaultTime: "4.00 PM"});
-                  </script>
+                  <input id="timepicker2" type="time" class="form-control input-small" value="16:00">
               </div>
             </div>
           </div>
@@ -92,10 +86,9 @@
                 <img class="media-object" src="frontend_play/assets/smiley.jpg" alt="..."></a>
               </div>
               <div class="media-body">
-                <h4 class="media-heading">Later that day, we'll ask you how you're feeling</h4>
-                <p>What time would you like to receive your response email?</p>
+                <h4 class="media-heading">Where are you in the world?</h4>
 
-                <div class="input-group-archy">
+                <div>
                   <!-- <input id="timepicker2" type="text" class="form-control input-small" default-time="4.00 PM">  -->
                   <?php
                   function formatOffset($offset) {
