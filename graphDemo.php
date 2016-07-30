@@ -65,6 +65,8 @@
         // get data table
         var jsonData = "<?php echo $data_table ?>";
 
+        document.querySelector('.zebzeb').innerHTML = jsonData;  // debug
+
         var data = new google.visualization.DataTable(jsonData);
 
         // Set chart options
@@ -98,7 +100,9 @@
         <div class="header clearfix">
           <?php include_once('header.php') ?>
         </div>
-        <div class='jumbotron'> <p class="lead"> <div id="chart_div"></div></div></p>
+        <div class='jumbotron'> <p class="lead"> <div id="chart_div"></div></p></div>
+
+        <div class='zebzeb'> </div>
         
         <footer class="footer">
           <p>&copy; 2016 Causali, Inc.</p>
