@@ -67,18 +67,17 @@
         // get data table
         var jsonData = '<?php echo $data_table ?>';
 
-        document.querySelector('.zebzeb').innerHTML = jsonData;  // debug
-
         var data = new google.visualization.DataTable(jsonData);
 
         // Set chart options
-        var options = {'title':'How Much Pizza I Ate Last Night',
+        var options = {'title':'Effect of meditation on happiness',
         'width':400,
         'height':300};
 
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
         chart.draw(data, options);
+        chart.hAxis.title = 'happiness'
 
       }
 
@@ -104,8 +103,6 @@
         </div>
         <div class='jumbotron'> <p class="lead"> <div id="chart_div"></div></p></div>
 
-        <div class='zebzeb'> </div>
-        
         <footer class="footer">
           <p>&copy; 2016 Causali, Inc.</p>
         </footer>

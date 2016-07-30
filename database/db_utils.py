@@ -493,8 +493,8 @@ def get_results(experiment_id=[], user_id=[]):
     zz = z['random_number'].mean()
     table_description = {'condition': ('string', 'Condition'),
                          'result': ('number', 'Happiness')}
-    pydic_data = [{'condition': 'Meditate', 'result': (zz[0], 'debug1')},
-                  {'condition': 'Not meditate', 'result': (zz[1], 'debug2')}]
+    pydic_data = [{'condition': 'Meditate', 'result': (zz[0], str(zz[0]))},
+                  {'condition': 'Not meditate', 'result': (zz[1], str(zz[1]))}]
     g_datatable = gviz_api.DataTable(table_description)
     g_datatable.LoadData(pydic_data)
     
