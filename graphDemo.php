@@ -20,6 +20,8 @@
   
   exec("python database/get_resultstable.py $temp1 $temp2", $data_table); 
 
+  $data_table = $data_table[0];
+
   ?>
 
   <script type="text/javascript">

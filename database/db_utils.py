@@ -497,6 +497,9 @@ def get_results(experiment_id=[], user_id=[]):
                   {'condition': 'Not meditate', 'result': (zz[1], 'debug2')}]
     g_datatable = gviz_api.DataTable(table_description)
     g_datatable.LoadData(pydic_data)
+    
+    #return g_datatable.ToJSon(columns_order=('condition', 'result'),
+    #						  order_by='condition')
     return g_datatable.ToJSon()
     
 
