@@ -52,9 +52,8 @@ def probe_meditation(name, email, trialHash):
 		resp % {'rating': 3} + \
 		resp % {'rating': 4} + \
 		resp % {'rating': 5} + \
-
+		"<br><br>" + \
 		noresp + \
-
 		"<br><p>Warmly,<br><br>Your friends at Causali</p>" + \
 		"<br><br>%s" % unsubscribe_string % {'email': email} + \
 		"</body></html>"
