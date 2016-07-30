@@ -71,7 +71,7 @@
 
         // Set chart options
         var options = {'title':'Effect of meditation on happiness',
-        'hAxis': {'title': 'happiness'}
+        'hAxis': {'title': 'happiness'},
         'legend': {'position': 'none'},
         'width':400,
         'height':300};
