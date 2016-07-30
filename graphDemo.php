@@ -71,13 +71,14 @@
 
         // Set chart options
         var options = {'title':'Effect of meditation on happiness',
+        'hAxis': {'title': 'happiness'}
+        'legend': {'position': 'none'},
         'width':400,
         'height':300};
 
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
         chart.draw(data, options);
-        chart.hAxis.title = 'happiness';
 
       }
 
