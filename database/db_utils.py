@@ -1,4 +1,4 @@
-# import packages
+	# import packages
 import sys
 import os
 # this adds the zapscience folder so we dont have to deal with bs relative path issues
@@ -12,11 +12,16 @@ import mail.email_defs as email_defs
 import pandas as pd
 from itertools import groupby
 
+
+
+
 # find the database URI. If not available in the environment, use local mongodb host
 URI = os.getenv('MONGO_URI', 'mongodb://localhost')
+# get the name of the database: either causali or causali-staging (or localhost).
+db = URI.split('/')[-1]
 
 # function definitions that can be used by other scripts
-def open_connection(URI=URI, db='causali', collectionName='users'):
+def open_connection(collectionName, URI=URI, db=db):
 	""" Opens connection and returns connection details
 	Inputs
 		URI 			server to connect to (includes credentials)
@@ -79,7 +84,7 @@ def store_user(name, email, timezone=0):
 def register_user_experiment(name, email, timezone, exp_name, condition1, nTrials1, condition2, nTrials2, dependents, ITI, instruction_time, response_time):
 	"""First point of contact after user designs a custom experiment.
 
-	Initialises the user, experiment, trials and results. Inputs come from welcome_custom_exp.php and
+	Initialises the user, experiment, trials. Inputs come from welcome_custom_exp.php and
 	index_full_exp.html
 
 	Returns
@@ -134,7 +139,7 @@ def register_user_experiment(name, email, timezone, exp_name, condition1, nTrial
 	user = store_user(name, email, timezone)
 	exp = store_experiment(exp_name, conditions, dependents, nTrials, instruction_time, response_time, ITI)
 	init_trials(str(user.inserted_id), str(exp.inserted_id))
-	print("Successfully registered user, stored experiment, and initiated trials and results.")
+	print("Successfully registered user, stored experiment, and initiated trials.")
 	sys.stdout.flush()
 	return True
 
