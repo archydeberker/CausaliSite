@@ -63,7 +63,9 @@
       function drawCustomChart(data) {
 
         // get data table
-        var data = "<?php echo $data_table ?>";
+        var jsonData = "<?php echo $data_table ?>";
+
+        var data = new google.visualization.DataTable(jsonData);
 
         // Set chart options
         var options = {'title':'How Much Pizza I Ate Last Night',
