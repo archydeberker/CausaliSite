@@ -65,7 +65,7 @@
       function drawCustomChart(data) {
 
         // get data table
-        var jsonData = "<?php echo $data_table ?>";
+        var jsonData = "<?php echo json_encode($data_table) ?>";
 
         document.querySelector('.zebzeb').innerHTML = jsonData;  // debug
 
