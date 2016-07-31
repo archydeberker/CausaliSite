@@ -273,11 +273,10 @@ def init_experiment_meditation(user, instructionTime='07:00', responseTime='16:0
 		'conditions': ["meditate", "do not meditate"],
 		'dependent_vars': ["happiness"],
 		'nTrials': [10, 10],
-		'instruction_prompt': 7, #time of day in hours between 0 and 24
 		'ITI': 24, # set the ITI between trials in hours
 		'randomise': 'max3', #how to randomise; see init_trials() for implementation
 		'user_id': user,
-		'instructionTimeLocal': instructionTime,
+		'instructionTimeLocal': instructionTime,  # store as string and only make into datetime when using it (mongo doesn't store properly)
 		'responseTimeLocal': responseTime,
 		'created_at': datetime.datetime.utcnow(),
 		'last_modified': datetime.datetime.utcnow(),
