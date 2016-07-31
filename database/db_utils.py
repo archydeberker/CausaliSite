@@ -11,6 +11,7 @@ import hashlib
 import mail.email_defs as email_defs
 import pandas as pd
 from itertools import groupby
+import pytz
 
 
 
@@ -49,7 +50,7 @@ def close_connection(client):
 	client.close()
 
 
-def store_user(name, email, timezone=0):
+def store_user(name, email, timezone='Europe/London'):
 	""" Store user info in a collection. 
 	As I understand it you don't have to sanitise inputs in MongoDB unless you're concatenating strings.
 	Instead of using the has we can use the objectID in the mongoDB database, which is unique. 
@@ -59,8 +60,6 @@ def store_user(name, email, timezone=0):
 	Input:
 		name 		string
 		email 		string
-		collection 	pymongo handle to collection, as provided by open_connection(). If not provided, opens connection using open_connection()
-		timezone 	number (int or float) indicating offset from UTC (should use proper timezone stuff [pytz] at some point, but too big a hassle for now)
 	Returns:
 		result 		contains unique id of user as insert_results.inserted_id
 	"""
@@ -84,7 +83,7 @@ def store_user(name, email, timezone=0):
 def register_user_experiment(name, email, timezone, exp_name, condition1, nTrials1, condition2, nTrials2, dependents, ITI, instruction_time, response_time):
 	"""First point of contact after user designs a custom experiment.
 
-	Initialises the user, experiment, trials and results. Inputs come from welcome_custom_exp.php and
+	Initialises the user, experiment, trials. Inputs come from welcome_custom_exp.php and
 	index_full_exp.html
 
 	Returns
@@ -139,20 +138,43 @@ def register_user_experiment(name, email, timezone, exp_name, condition1, nTrial
 	user = store_user(name, email, timezone)
 	exp = store_experiment(exp_name, conditions, dependents, nTrials, instruction_time, response_time, ITI)
 	init_trials(str(user.inserted_id), str(exp.inserted_id))
-	init_results(str(user.inserted_id), str(exp.inserted_id))
-	print("Successfully registered user, stored experiment, and initiated trials and results.")
+	print("Successfully registered user, stored experiment, and initiated trials.")
 	sys.stdout.flush()
 	return True
 
 
-def init_trials(user_id, experiment_id=None):
+def store_experiment(exp_name=['My Experiment'], conditions=['condition1', 'condition2'], dependents=['happiness'], nTrials=[10, 10], instruction_prompt=7, response_prompt=15, ITI=24, randomise='max3'):
+	"""Store a custom experiment.
+
+	See default values for format of input.
+
+	"""
+	# open a new connection
+	client, db, collection = open_connection(collectionName='experiments')
+	# fill with single experiment. Does not check for unique name 
+	insert_result = collection.insert_one({
+		'name': exp_name,
+		'conditions': conditions,
+		'dependent_vars': dependents,
+		'nTrials': nTrials,
+		'instruction_prompt': instruction_prompt, #time of day in hours between 0 and 24
+		'response_prompt': response_prompt, #time of day in hours between 0 and 24
+		'ITI': ITI, # set the ITI between trials in hours
+		'randomise': randomise, #how to randomise; see init_trials() for implementation
+		'created_at': datetime.datetime.utcnow(),
+		'last_modified': datetime.datetime.utcnow(),
+	})
+	return insert_result
+
+
+def init_trials(user_id, experiment_id):
 	""" Initialises all the trials for an experiment for a user, reading a document in the 'experiments' database and populating the 'trials' collection.
 
 	This assumes that the experiment already exists in the database, and simply reads out the experiments and makes sure all reminders are set, timezones are corrected for,
 	and order of conditions is randomised
 	Inputs
 		user_id 		string, not an ObjectId
-		experiment_id 	string, not an ObjectId. If not given, creates new 'meditation' and uses that
+		experiment_id 	string, not an ObjectId
 
 	Returns
 		input_result	array of insert results
@@ -161,12 +183,7 @@ def init_trials(user_id, experiment_id=None):
 	client, db_handle, users_coll = open_connection(collectionName='users')
 	experiments_coll = db_handle['experiments']
 	# get information about the experiment and store it into the variable
-	if not experiment_id: # exp not given
-		# init new meditation exp
-		_id = init_experiment_meditation().inserted_id
-		exp = experiments_coll.find_one({'_id': _id})	
-	else:
-		exp = experiments_coll.find_one({"_id": ObjectId(experiment_id)})
+	exp = experiments_coll.find_one({"_id": ObjectId(experiment_id)})
 	# get information about the user and store it into variable using next()
 	user = users_coll.find_one({"_id": ObjectId(user_id)})
 	
@@ -196,16 +213,31 @@ def init_trials(user_id, experiment_id=None):
 	if not satisfied:
 		print('did not reach criterion for randomising; using current state of condition_array instead')
 	
-	# get the first condition email and response request. We can then just add 24 hours to each of these
-	first_instruction_datetime = datetime.datetime.combine(  # first define the date and time in UTC
-			datetime.date.today() + datetime.timedelta(days=1), # tomorrow's date
-			datetime.time(hour=exp["instruction_prompt"]) # the time of day to send the prompt
-		) + datetime.timedelta(hours=user["timezone"]) # then add a delta based on the timezone
-	first_response_datetime = datetime.datetime.combine( # first define the date and time in UTC
-			datetime.date.today() + datetime.timedelta(days=1), # tomorrow's date
-			datetime.time(hour=exp["response_prompt"]) # the time of day to send the prompt
-		) + datetime.timedelta(hours=user["timezone"]) # then add a delta based on the timezone
-
+	# make a pytz object to localise the dates and times. Some crucial notes on timezones:
+	# - Once a date-aware object is written to Mongo it will be transformed to UTC. 
+	# - create a timezone object using pytz.timezone('string')
+	# - Transform an existing tz-aware datetime to another timezone using .astimezone(tz_object)
+	tzUser = pytz.timezone(user['timezone'])
+	tzUTC = pytz.utc
+	# get current datetime in user's timezone
+	nowLocal = tzUTC.localize(datetime.datetime.utcnow()).astimezone(tzUser)
+	# get today's date so we know when 'tomorrow' is for this user. 
+	dateLocal = nowLocal.date()
+	tomorrowLocal = dateLocal + datetime.timedelta(days=1)
+	# get the first condition email and response request in the user's local time, and localise it so that when it's 
+	# STORED IN MONGO IT'S SET TO UTC AUTOMATICALLY. After that we can then just add 24 hours to each of these
+	first_instruction_datetime = tzUser.localize(
+		datetime.datetime.combine(  # combine tomorrow's date with the time to send the message
+			tomorrowLocal, # tomorrow's date in user's tz
+			datetime.datetime.strptime(exp["instructionTimeLocal"], '%H:%M').time()  # the time of day to send the prompt datetime.datetime.strptime(instructionTime, '%H:%M').time() 
+		)
+	)
+	first_response_datetime = tzUser.localize(
+		datetime.datetime.combine(  # combine tomorrow's date with the time to send the message
+			tomorrowLocal, # tomorrow's date in user's tz
+			datetime.datetime.strptime(exp["responseTimeLocal"], '%H:%M').time()  # the time of day to send the prompt datetime.datetime.strptime(instructionTime, '%H:%M').time() 
+		)
+	)
 	# insert each trial into database.
 	insert_result = []
 	for ix, condition in enumerate(condition_array):
@@ -217,7 +249,7 @@ def init_trials(user_id, experiment_id=None):
 			'instruction_sent': False,
 			'response_request_sent': False,
 			'response_given': False,
-			'instruction_date': first_instruction_datetime + datetime.timedelta(hours=ix * exp["ITI"]), # add one day for each next trial
+			'instruction_date': first_instruction_datetime + datetime.timedelta(hours=ix * exp["ITI"]), # add one day for each next trial. Will be transformed to UTC.
 			'response_date': first_response_datetime + datetime.timedelta(hours=ix * exp["ITI"]), # ditto
 			'created_at': datetime.datetime.utcnow(),
 			'last_modified': datetime.datetime.utcnow(),
@@ -225,53 +257,9 @@ def init_trials(user_id, experiment_id=None):
 			'hash_sha256': hashlib.sha256(str(np.random.random())).hexdigest() # add a random hash, because if you don't add the np.random.random() then the same user doing experiment twice will go messed up
 		}))
 	return insert_result
-		
-		
-def init_results(user_id, experiment_id):
-	""" initialise the results document for a user's experiment
-
-	Inputs
-		user_id			string, should match an _id in users collection
-		experiment_id 	string, should match an _id in experiments collection
-
-	Returns
-		insert_result 	see insert_result.inserted_id for _id of inserted document
-	"""
-	client, db_handle, results_coll = open_connection(collectionName='results')
-	insert_result = results_coll.insert_one({
-		'user_id': user_id,
-		'experiment_id': experiment_id,
-		'created_at': datetime.datetime.utcnow(),
-		'last_modified': datetime.datetime.utcnow(),
-	})
-	return insert_result
-
-		
-def store_experiment(exp_name=['My Experiment'], conditions=['condition1', 'condition2'], dependents=['happiness'], nTrials=[10, 10], instruction_prompt=7, response_prompt=15, ITI=24, randomise='max3'):
-	"""Store a custom experiment.
-
-	See default values for format of input.
-
-	"""
-	# open a new connection
-	client, db, collection = open_connection(collectionName='experiments')
-	# fill with single experiment. Does not check for unique name 
-	insert_result = collection.insert_one({
-		'name': exp_name,
-		'conditions': conditions,
-		'dependent_vars': dependents,
-		'nTrials': nTrials,
-		'instruction_prompt': instruction_prompt, #time of day in hours between 0 and 24
-		'response_prompt': response_prompt, #time of day in hours between 0 and 24
-		'ITI': ITI, # set the ITI between trials in hours
-		'randomise': randomise, #how to randomise; see init_trials() for implementation
-		'created_at': datetime.datetime.utcnow(),
-		'last_modified': datetime.datetime.utcnow(),
-	})
-	return insert_result
 
 
-def init_experiment_meditation(user):
+def init_experiment_meditation(user, instructionTime='07:00', responseTime='16:00'):
 	""" Code to initialise the meditation experiment in the database. Helpful to identify what variables to store and how to name them
 	
 	Returns an instance of pymongo InsertOneResult, e.g. insert_result.inserted_id 
@@ -285,11 +273,11 @@ def init_experiment_meditation(user):
 		'conditions': ["meditate", "do not meditate"],
 		'dependent_vars': ["happiness"],
 		'nTrials': [10, 10],
-		'instruction_prompt': 7, #time of day in hours between 0 and 24
-		'response_prompt': 15, #time of day in hours between 0 and 24
 		'ITI': 24, # set the ITI between trials in hours
 		'randomise': 'max3', #how to randomise; see init_trials() for implementation
 		'user_id': user,
+		'instructionTimeLocal': instructionTime,  # store as string and only make into datetime when using it (mongo doesn't store properly)
+		'responseTimeLocal': responseTime,
 		'created_at': datetime.datetime.utcnow(),
 		'last_modified': datetime.datetime.utcnow(),
 	})
@@ -485,55 +473,6 @@ def trials_completed(filter={}):
 	return trials_collection.find(query).count()
 
 
-def update_results(results_filter={}):
-	"""Updates every doc in the 'results' collection that fits the filter
-	
-	First finds all results that satisfy the filter, and then loops over them to update.
-	Filter might contain something like last_modified, a particular results _id, a user, experiment,
-	and so on. 
-
-	Input
-		results_filter 		a filter passes directly to mongodb to select documents in the 'results' collection
-
-	"""
-	# open connection
-	client, db, results_collection = open_connection(collectionName='results')
-	# get documents to update
-	docs = results_collection.find(results_filter)
-	# loop over each document
-	for doc in docs:
-		# get all trials for this user and this experiment
-		# and put into a list
-		trials = pd.DataFrame(list(db['trials'].find({
-			"experiment_id": doc["experiment_id"], 
-			"user_id": doc["user_id"]
-		})))
-		# get experiment to read out conditions
-		exp = db['experiments'].find_one({'_id': ObjectId(doc['experiment_id'])})
-		# generate as many lists as conditions, each with a numpy array
-		# with non-NaN scores for that condition.
-		# This will make it easier to do things like std, mean, median, t-tests, f-tests
-		dat = [np.array(trials[(trials.condition == cond) & (trials.response_given)].trialRating) for cond in exp['conditions']]
-		# now update the results doc, calculating some measures along the way
-		print doc["_id"]
-		results_collection.update_one({"_id": doc["_id"]}, {
-			"$set": {
-				"n_completed": int(np.sum(trials.response_given)),
-				"proportion_complete": float(np.sum(trials.response_given)/len(trials.index)),
-				"response_rate": float(np.sum(trials.response_given)/np.sum(trials.response_request_sent)),
-			 	"mean_score": float(np.nanmean(trials.trialRating)),
-				"mean_score_per_condition": [np.mean(cond) for cond in dat],
-				"std_score_per_condition": [np.std(cond) for cond in dat],
-				"median_score_per_condition": [np.median(cond) for cond in dat],
-				"scores_per_condition": [list(cond) for cond in dat],
-				"Cohen_effect_size_0_minus_1": (np.mean(dat[0])-np.mean(dat[1])) / np.sqrt(((len(dat[0])-1)*np.var(dat[0]) + (len(dat[1])-1)*np.var(dat[1])) /	(len(dat[0])+len(dat[1]))),
-			},
-			"$currentDate": {
-				"last_modified": True
-			}
-		})
-
-
 def delete_user(_id):
 	"""Delete a user
 	
@@ -573,19 +512,6 @@ def delete_trials(trial_list):
 	for _id in trial_list:
 		result.append(coll.delete_one({'_id': ObjectId(_id)}))
 	return result
-
-
-def delete_result(_id):
-	"""Delete a result doc
-
-	Input
-		_id 		string, will be converted to ObjectId
-
-	Returns
-		DeleteResult
-	"""
-	_, _, coll = open_connection(collectionName='results')
-	return coll.delete_one({'_id': ObjectId(_id)})
 
 
 def unsubscribe_user(email):

@@ -11,6 +11,9 @@
   <?php
   $name = $_POST["inputName"];
   $email = $_POST["inputEmail"];
+  $instructionTime  = $_POST["instructionTime"];
+  $responseTime = $_POST["responseTime"];
+  $timezone = $_POST["userTimeZone"];
   // default name
   //$name = "Prof";
 
@@ -18,7 +21,7 @@
   $name_clean = filter_var($name, FILTER_SANITIZE_STRING);
   $email_clean = filter_var($email, FILTER_SANITIZE_EMAIL);
 
-  exec("python database/signup_meditation.py $name_clean $email_clean");
+  exec("python database/signup_meditation.py $name_clean $email_clean $instructionTime $responseTime $timezone");
   ?>
 
   <div class="container">
