@@ -278,8 +278,8 @@ def init_experiment_meditation(user, instructionTime='07:00', responseTime='16:0
 		'ITI': 24, # set the ITI between trials in hours
 		'randomise': 'max3', #how to randomise; see init_trials() for implementation
 		'user_id': user,
-		'instructionTimeLocal': instructionTime
-		'responseTimeLocal': responseTime
+		'instructionTimeLocal': instructionTime,
+		'responseTimeLocal': responseTime,
 		'created_at': datetime.datetime.utcnow(),
 		'last_modified': datetime.datetime.utcnow(),
 	})
