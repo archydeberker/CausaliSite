@@ -36,7 +36,7 @@
             
             <div class="col-xs-4 col-sm-4 placeholder">
               <img src="frontend_play/assets/peter.jpg" width="150" height="150" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Peter Smittennaar</h4>
+              <h4>Peter Smittenaar</h4>
               <span class="text-muted">P</span>
             </div>
 
