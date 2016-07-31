@@ -143,6 +143,30 @@ def register_user_experiment(name, email, timezone, exp_name, condition1, nTrial
 	return True
 
 
+def store_experiment(exp_name=['My Experiment'], conditions=['condition1', 'condition2'], dependents=['happiness'], nTrials=[10, 10], instruction_prompt=7, response_prompt=15, ITI=24, randomise='max3'):
+	"""Store a custom experiment.
+
+	See default values for format of input.
+
+	"""
+	# open a new connection
+	client, db, collection = open_connection(collectionName='experiments')
+	# fill with single experiment. Does not check for unique name 
+	insert_result = collection.insert_one({
+		'name': exp_name,
+		'conditions': conditions,
+		'dependent_vars': dependents,
+		'nTrials': nTrials,
+		'instruction_prompt': instruction_prompt, #time of day in hours between 0 and 24
+		'response_prompt': response_prompt, #time of day in hours between 0 and 24
+		'ITI': ITI, # set the ITI between trials in hours
+		'randomise': randomise, #how to randomise; see init_trials() for implementation
+		'created_at': datetime.datetime.utcnow(),
+		'last_modified': datetime.datetime.utcnow(),
+	})
+	return insert_result
+
+
 def init_trials(user_id, experiment_id):
 	""" Initialises all the trials for an experiment for a user, reading a document in the 'experiments' database and populating the 'trials' collection.
 
@@ -208,7 +232,7 @@ def init_trials(user_id, experiment_id):
 			datetime.datetime.strptime(exp["instructionTimeLocal"], '%H:%M').time()  # the time of day to send the prompt datetime.datetime.strptime(instructionTime, '%H:%M').time() 
 		)
 	)
-	first_instruction_datetime = tzUser.localize(
+	first_response_datetime = tzUser.localize(
 		datetime.datetime.combine(  # combine tomorrow's date with the time to send the message
 			tomorrowLocal, # tomorrow's date in user's tz
 			datetime.datetime.strptime(exp["responseTimeLocal"], '%H:%M').time()  # the time of day to send the prompt datetime.datetime.strptime(instructionTime, '%H:%M').time() 
@@ -234,30 +258,6 @@ def init_trials(user_id, experiment_id):
 		}))
 	return insert_result
 
-		
-def store_experiment(exp_name=['My Experiment'], conditions=['condition1', 'condition2'], dependents=['happiness'], nTrials=[10, 10], instruction_prompt=7, response_prompt=15, ITI=24, randomise='max3'):
-	"""Store a custom experiment.
-
-	See default values for format of input.
-
-	"""
-	# open a new connection
-	client, db, collection = open_connection(collectionName='experiments')
-	# fill with single experiment. Does not check for unique name 
-	insert_result = collection.insert_one({
-		'name': exp_name,
-		'conditions': conditions,
-		'dependent_vars': dependents,
-		'nTrials': nTrials,
-		'instruction_prompt': instruction_prompt, #time of day in hours between 0 and 24
-		'response_prompt': response_prompt, #time of day in hours between 0 and 24
-		'ITI': ITI, # set the ITI between trials in hours
-		'randomise': randomise, #how to randomise; see init_trials() for implementation
-		'created_at': datetime.datetime.utcnow(),
-		'last_modified': datetime.datetime.utcnow(),
-	})
-	return insert_result
-
 
 def init_experiment_meditation(user, instructionTime='07:00', responseTime='16:00'):
 	""" Code to initialise the meditation experiment in the database. Helpful to identify what variables to store and how to name them
@@ -274,7 +274,6 @@ def init_experiment_meditation(user, instructionTime='07:00', responseTime='16:0
 		'dependent_vars': ["happiness"],
 		'nTrials': [10, 10],
 		'instruction_prompt': 7, #time of day in hours between 0 and 24
-		'response_prompt': 15, #time of day in hours between 0 and 24
 		'ITI': 24, # set the ITI between trials in hours
 		'randomise': 'max3', #how to randomise; see init_trials() for implementation
 		'user_id': user,
