@@ -108,14 +108,19 @@
                   $utc = new DateTimeZone('UTC');
                   $dt = new DateTime('now', $utc);
 
-                  echo '<select name="userTimeZone" value="Europe/London [BST +01:00]">';
+                  echo '<select name="userTimeZone">';
                   foreach(DateTimeZone::listIdentifiers() as $tz) {
                       $current_tz = new DateTimeZone($tz);
                       $offset =  $current_tz->getOffset($dt);
                       $transition =  $current_tz->getTransitions($dt->getTimestamp(), $dt->getTimestamp());
                       $abbr = $transition[0]['abbr'];
 
-                      echo '<option value="' .$tz. '">' .$tz. ' [' .$abbr. ' '. formatOffset($offset). ']</option>';
+                      if ($tz == "Europe/London") {
+                        echo '<option selected="selected" value="' .$tz. '">' .$tz. ' [' .$abbr. ' '. formatOffset($offset). ']</option>';
+                      } else {
+                        echo '<option value="' .$tz. '">' .$tz. ' [' .$abbr. ' '. formatOffset($offset). ']</option>';
+                      }
+
                   }
                   echo '</select>';
                   ?>
