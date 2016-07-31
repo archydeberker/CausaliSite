@@ -193,7 +193,7 @@ def init_trials(user_id, experiment_id):
 	# - Once a date-aware object is written to Mongo it will be transformed to UTC. 
 	# - create a timezone object using pytz.timezone('string')
 	# - Transform an existing tz-aware datetime to another timezone using .astimezone(tz_object)
-	tzUser = pytz.timezone(user.timezone)
+	tzUser = pytz.timezone(user['timezone'])
 	tzUTC = pytz.utc
 	# get current datetime in user's timezone
 	nowLocal = tzUTC.localize(datetime.datetime.utcnow()).astimezone(tzUser)
