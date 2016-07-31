@@ -108,7 +108,7 @@
                   $utc = new DateTimeZone('UTC');
                   $dt = new DateTime('now', $utc);
 
-                  echo '<select name="userTimeZone" value='Europe/London'>';
+                  echo '<select name="userTimeZone" value="Europe/London">';
                   foreach(DateTimeZone::listIdentifiers() as $tz) {
                       $current_tz = new DateTimeZone($tz);
                       $offset =  $current_tz->getOffset($dt);
