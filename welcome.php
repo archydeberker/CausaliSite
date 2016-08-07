@@ -13,9 +13,9 @@
   $email = $_POST["inputEmail"];
   $instructionTime  = $_POST["instructionTime"];
   $responseTime = $_POST["responseTime"];
-  $timezone = $_POST["userTimeZone"];
-  // default name
-  //$name = "Prof";
+  // $timezone = $_POST["userTimeZone"];
+  $timezone = "fooblebar timezone";
+
 
   // sanitise input
   $name_clean = filter_var($name, FILTER_SANITIZE_STRING);
