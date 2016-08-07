@@ -16,7 +16,7 @@
   // $timezone = $_POST["userTimeZone"];
   $timezone = "fooblebar timezone";
 
-
+  # quoting arguments is NOT recommended (https://blogs.msdn.microsoft.com/twistylittlepassagesallalike/2011/04/23/everyone-quotes-command-line-arguments-the-wrong-way/)
   exec("python database/signup_meditation.py '$name' '$email' '$instructionTime' '$responseTime' '$timezone'");
   ?>
 
