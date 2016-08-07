@@ -17,11 +17,7 @@
   $timezone = "fooblebar timezone";
 
 
-  // sanitise input
-  $name_clean = filter_var($name, FILTER_SANITIZE_STRING);
-  $email_clean = filter_var($email, FILTER_SANITIZE_EMAIL);
-
-  exec("python database/signup_meditation.py $name_clean $email_clean $instructionTime $responseTime $timezone");
+  exec("python database/signup_meditation.py $name $email $instructionTime $responseTime $timezone");
   ?>
 
   <div class="container">
