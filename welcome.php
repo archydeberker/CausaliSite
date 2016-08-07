@@ -17,7 +17,7 @@
   $timezone = "fooblebar timezone";
 
 
-  exec("python database/signup_meditation.py $name $email $instructionTime $responseTime $timezone");
+  exec("python database/signup_meditation.py '$name' '$email' '$instructionTime' '$responseTime' '$timezone'");
   ?>
 
   <div class="container">
