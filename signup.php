@@ -80,53 +80,7 @@
 
           <br>
 
-          <div class="media">
-            <div class="media-left media-middle">
-              <a href='#''>
-                <img class="media-object" src="frontend_play/assets/smiley.jpg" alt="..."></a>
-              </div>
-              <div class="media-body">
-                <h4 class="media-heading">Where are you in the world?</h4>
 
-                <div>
-                  <!-- https://stackoverflow.com/questions/6921827/best-way-to-populate-a-select-box-with-timezones -->
-                  <?php
-                  function formatOffset($offset) {
-                          $hours = $offset / 3600;
-                          $remainder = $offset % 3600;
-                          $sign = $hours > 0 ? '+' : '-';
-                          $hour = (int) abs($hours);
-                          $minutes = (int) abs($remainder / 60);
-
-                          if ($hour == 0 AND $minutes == 0) {
-                              $sign = ' ';
-                          }
-                          return $sign . str_pad($hour, 2, '0', STR_PAD_LEFT) .':'. str_pad($minutes,2, '0');
-
-                  }
-
-                  $utc = new DateTimeZone('UTC');
-                  $dt = new DateTime('now', $utc);
-
-                  echo '<select name="userTimeZone">';
-                  foreach(DateTimeZone::listIdentifiers() as $tz) {
-                      $current_tz = new DateTimeZone($tz);
-                      $offset =  $current_tz->getOffset($dt);
-                      $transition =  $current_tz->getTransitions($dt->getTimestamp(), $dt->getTimestamp());
-                      $abbr = $transition[0]['abbr'];
-
-                      if ($tz == "Europe/London") {
-                        echo '<option selected="selected" value="' .$tz. '">' .$tz. ' [' .$abbr. ' '. formatOffset($offset). ']</option>';
-                      } else {
-                        echo '<option value="' .$tz. '">' .$tz. ' [' .$abbr. ' '. formatOffset($offset). ']</option>';
-                      }
-
-                  }
-                  echo '</select>';
-                  ?>
-              </div>
-            </div>
-          </div>
 
           <br>
 
