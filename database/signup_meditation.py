@@ -4,7 +4,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.join(os.path.realpath(__file__))), os.pardir)))
 import db_utils as db
-from mail.email_defs import confirm_signup_meditation
+from mail.email_defs import verify_user_by_email 
 
 name = sys.argv[1]
 email = sys.argv[2]
@@ -24,13 +24,10 @@ exp = db.init_experiment_meditation(user_id, instructionTime, responseTime)
 exp_id = exp.inserted_id
 print("Inserted experiment: %s" % exp_id)
 
-# initialise trials
-trials = db.init_trials(user_id, exp_id)
-trial_ids = [str(foo.inserted_id) for foo in trials]
-print("Inserted trials. First trial id: %s" % trial_ids[0])
+####### AT THIS STAGE THE TRIALS HAVE NOT BEEN INITIATED. This will happen once the user is confirmed
 
-# send an email to the user 
-confirm_signup_meditation(name, email)
+# send a verification email to register the user
+verify_user_by_email(email, user_id, exp_id, name)
 
 
 print("Finished signup_meditation.py")
