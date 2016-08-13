@@ -11,14 +11,12 @@
   <?php
   $name = $_POST["inputName"];
   $email = $_POST["inputEmail"];
-  // default name
-  //$name = "Prof";
+  $instructionTime  = $_POST["instructionTime"];
+  $responseTime = $_POST["responseTime"];
+  $timezone = $_POST["userTimeZone"];
 
-  // sanitise input
-  $name_clean = filter_var($name, FILTER_SANITIZE_STRING);
-  $email_clean = filter_var($email, FILTER_SANITIZE_EMAIL);
-
-  exec("python database/signup_meditation.py $name_clean $email_clean");
+  # quoting arguments is NOT recommended (https://blogs.msdn.microsoft.com/twistylittlepassagesallalike/2011/04/23/everyone-quotes-command-line-arguments-the-wrong-way/)
+  exec("python database/signup_meditation.py '$name' '$email' '$instructionTime' '$responseTime' '$timezone'");
   ?>
 
   <div class="container">

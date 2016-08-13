@@ -14,7 +14,7 @@
   // sanitise input
   $email_clean = filter_var($email, FILTER_SANITIZE_STRING);
 
-  exec("python database/unsubscribe_user.py $email_clean");
+  exec("python database/unsubscribe_user.py '$email_clean'");
   ?>
 
     <div class="container">

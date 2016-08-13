@@ -45,7 +45,6 @@
           </div>
           
           <br>
-          
 
           <div class="media">
             <div class="media-left media-middle">
@@ -57,11 +56,8 @@
                 <p>What time would you like to receive your instruction email?</p>
 
                 <div class="input-group-archy">
-                  <input id="timepicker1" type="text" class="form-control input-small" default-time="7.00 AM"> 
+                  <input name="instructionTime" type="time" class="form-control input-small" value="07:00"> 
                 </div>
-                <script type="text/javascript">
-                  $('#timepicker1').timepicker({defaultTime: "7.00 AM"});
-                </script>
               </div>
           </div>
           
@@ -77,16 +73,62 @@
                 <p>What time would you like to receive your response email?</p>
 
                 <div class="input-group-archy">
-                  <input id="timepicker2" type="text" class="form-control input-small" default-time="4.00 PM"> 
-                  <script type="text/javascript">
-                    $('#timepicker2').timepicker({defaultTime: "4.00 PM"});
-                  </script>
+                  <input name="responseTime" type="time" class="form-control input-small" value="16:00">
               </div>
             </div>
           </div>
 
           <br>
-          
+
+          <div class="media">
+            <div class="media-left media-middle">
+              <a href='#''>
+                <img class="media-object" src="frontend_play/assets/smiley.jpg" alt="..."></a>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">Where are you in the world?</h4>
+
+                <div>
+                  <!-- https://stackoverflow.com/questions/6921827/best-way-to-populate-a-select-box-with-timezones -->
+                  <?php
+                  function formatOffset($offset) {
+                          $hours = $offset / 3600;
+                          $remainder = $offset % 3600;
+                          $sign = $hours > 0 ? '+' : '-';
+                          $hour = (int) abs($hours);
+                          $minutes = (int) abs($remainder / 60);
+
+                          if ($hour == 0 AND $minutes == 0) {
+                              $sign = ' ';
+                          }
+                          return $sign . str_pad($hour, 2, '0', STR_PAD_LEFT) .':'. str_pad($minutes,2, '0');
+
+                  }
+
+                  $utc = new DateTimeZone('UTC');
+                  $dt = new DateTime('now', $utc);
+
+                  echo '<select name="userTimeZone">';
+                  foreach(DateTimeZone::listIdentifiers() as $tz) {
+                      $current_tz = new DateTimeZone($tz);
+                      $offset =  $current_tz->getOffset($dt);
+                      $transition =  $current_tz->getTransitions($dt->getTimestamp(), $dt->getTimestamp());
+                      $abbr = $transition[0]['abbr'];
+
+                      if ($tz == "Europe/London") {
+                        echo '<option selected="selected" value="' .$tz. '">' .$tz. ' [' .$abbr. ' '. formatOffset($offset). ']</option>';
+                      } else {
+                        echo '<option value="' .$tz. '">' .$tz. ' [' .$abbr. ' '. formatOffset($offset). ']</option>';
+                      }
+
+                  }
+                  echo '</select>';
+                  ?>
+              </div>
+            </div>
+          </div>
+
+          <br>
 
           <div class="media">
             <div class="media-left media-middle">

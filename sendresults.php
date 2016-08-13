@@ -13,7 +13,7 @@
 	// Send
 	$temp1 = $_GET["trialhash"];
 	$temp2 = $_GET["rating"];
-	exec("python database/store_response.py $temp1 $temp2");
+	exec("python database/store_response.py '$temp1' '$temp2'");
 	?>
 
 	<div class="container">

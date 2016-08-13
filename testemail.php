@@ -17,7 +17,7 @@
   // sanitise input
   $email_clean = filter_var($email, FILTER_SANITIZE_EMAIL);
 
-  exec("python database/test_email.py $type $email_clean");
+  exec("python database/test_email.py '$type' '$email_clean'");
   ?>
 
   <div class="container">
