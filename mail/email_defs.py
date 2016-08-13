@@ -30,7 +30,7 @@ def verify_user_by_email(email, user_id, exp_id, name="Tester"):
 	                 <p>See you soon,</p>
 	                 <p>The Causali team</p>
 	                 </body></html>
-	                 """ % {'name': name, 'confirm_URL': domain + 'verify_signup.php?email=%s&user_id=%s&exp_id=%s' % (email, str(user_id), str(exp_id))}
+	                 """ % {'name': name, 'confirm_URL': domain + 'verify_signup.php?email=%s&user_id=%s&exp_id=%s' % (email, str(user_id), str(exp_id))},
 	                 tag = "verify"
              	)
 	result = message.send()

@@ -1,4 +1,5 @@
 # First point of contact after a user has signed up for the meditation experiment.
+# Will register the user and experiment, but not the trials—this happens after user has confirmed their email. 
 
 import sys
 import os
