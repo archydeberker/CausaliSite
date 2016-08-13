@@ -9,8 +9,8 @@ from bson.objectid import ObjectId # to be able to query _id in mongo
 
 
 email = sys.argv[1]
-user = ObjectId(sys.argv[2])
-exp = ObjectId(sys.argv[3])
+user_id = ObjectId(sys.argv[2])
+exp_id = ObjectId(sys.argv[3])
 
 # initialise trials
 trials = db.init_trials(str(user_id), str(exp_id))
@@ -18,7 +18,7 @@ trial_ids = [str(foo.inserted_id) for foo in trials]
 print("Inserted trials. First trial id: %s" % trial_ids[0])
 
 # send an email to the user 
-confirm_signup_meditation(name, email)
+confirm_signup_meditation(email)
 
 
 print("Finished verify_and_initialise_exp.py")
