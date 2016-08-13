@@ -4,7 +4,10 @@
 import os
 from postmark import PMMail
 
-unsubscribe_string = '<p><small>To unsubscribe and END all experiments associated with %(email)s, click <a href="https://zapscience.herokuapp.com/unsubscribe.php?email=%(email)s" target="_blank">here</a>. Warning: this action cannot be undone.</small></p>'
+# get domain, which will be different depending on staging vs production
+domain = os.getenv('DOMAIN', 'http://www.causali.me/')
+
+unsubscribe_string = '<p><small>To unsubscribe and END all experiments associated with %(email)s, click <a href="%(domain)sunsubscribe.php?email=%(email)s" target="_blank">here</a>. Warning: this action cannot be undone.</small></p>' 
 
 def confirm_signup_meditation(name="Tester", email="a@deberker.com"):
 	"""Sends a welcome message to a user.
@@ -25,7 +28,7 @@ def confirm_signup_meditation(name="Tester", email="a@deberker.com"):
 	                 <br><br>
 	                 %s
 	                 </body></html>
-	                 """ % (name, unsubscribe_string) % {'email': email},
+	                 """ % (name, unsubscribe_string) % {'email': email, 'domain': domain},
 	                 tag = "welcome"
              	)
 	result = message.send()
@@ -43,8 +46,8 @@ def probe_meditation(name, email, trialHash):
 		result 		should contain info about whether message was successfully sent. Not sure what is in it
 	"""
 
-	resp 	= '<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=' + trialHash + '&rating=%(rating)d"><img src="http://www.petersmittenaar.com/media/rating%(rating)d.png"></a>'
-	noresp 	=  '<a href="https://zapscience.herokuapp.com/sendresults.php?trialhash=' + trialHash + '&rating=0"> click here to skip today </a><br>'
+	resp 	= '<a href="%(domain)ssendresults.php?trialhash=' % {'domain': domain} + trialHash + '&rating=%(rating)d"><img src="http://www.petersmittenaar.com/media/rating%(rating)d.png"></a>'
+	noresp 	=  '<a href="%(domain)ssendresults.php?trialhash=' % {'domain': domain} + trialHash + '&rating=0"> click here to skip today </a><br>'
 
 	bodyText = "<html><body>Hi %s,<br><br>It''s time to report back how you''ve been feeling today.<br>" % name + \
 		resp % {'rating': 1} + \
@@ -55,7 +58,7 @@ def probe_meditation(name, email, trialHash):
 		"<br><br>" + \
 		noresp + \
 		"<br><p>Warmly,<br><br>Your friends at Causali</p>" + \
-		"<br><br>%s" % unsubscribe_string % {'email': email} + \
+		"<br><br>%s" % unsubscribe_string % {'email': email, 'domain': domain} + \
 		"</body></html>"
 
 	message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
@@ -96,7 +99,7 @@ def instruct_meditation(name, email, condition):
 	                 <br><br>
 	                 %s
 	                 </body></html>
-	                 """ % (name, condition.upper(), unsubscribe_string) % {'email': email},
+	                 """ % (name, condition.upper(), unsubscribe_string) % {'email': email, 'domain': domain},
 	                 tag = "instruction")
 
 	result = message.send()
