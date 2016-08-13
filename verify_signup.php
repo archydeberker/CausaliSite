@@ -9,9 +9,9 @@
   <body>
   <!-- PHP bit to store data and send email -->
   <?php
-  $email = $_POST["email"];
-  $user  = $_POST["user_id"];
-  $exp   = $_POST["exp_id"];
+  $email = $_GET["email"];
+  $user  = $_GET["user_id"];
+  $exp   = $_GET["exp_id"];
 
   # quoting arguments is NOT recommended (https://blogs.msdn.microsoft.com/twistylittlepassagesallalike/2011/04/23/everyone-quotes-command-line-arguments-the-wrong-way/)
   exec("python database/verify_and_initialise_exp.py '$email' '$user' '$exp'");
