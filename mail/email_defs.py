@@ -9,7 +9,35 @@ domain = os.getenv('DOMAIN', 'http://www.causali.me/')
 
 unsubscribe_string = '<p><small>To unsubscribe and END all experiments associated with %(email)s, click <a href="%(domain)sunsubscribe.php?email=%(email)s" target="_blank">here</a>. Warning: this action cannot be undone.</small></p>' 
 
-def confirm_signup_meditation(name="Tester", email="a@deberker.com"):
+def verify_user_by_email(email, user_id, exp_id, name="Tester"):
+	"""Sends an email to the user asking them to click a link to verify.
+	Called by signup_meditation.py.
+
+	Args:
+		email: string with email of user
+		user_id: ObjectId of the user_id
+		exp_id: ObjectId with exp_id that the user has signed up for. needs to be passed on so once confirmed, we know what exp to activate
+
+	"""
+	message = PMMail(api_key = os.environ.get('POSTMARK_API_TOKEN'),
+	                 subject = "[Causali] Please confirm your email" ,
+	                 sender = "a@deberker.com",
+	                 to = email,
+	                 html_body = """
+	                 <h2p>Hi %(name)s!</h2>
+	                 <p>We're getting ready to start you on your first Causali experiment. Before we get started though, <a href="%(confirm_URL)s" target="_blank"><em>please click here to confirm your signup</em></a>.</p>
+	                 <p>You can also copy this link into your browser: %(confirm_URL)s
+	                 <p>See you soon,</p>
+	                 <p>The Causali team</p>
+	                 </body></html>
+	                 """ % {'name': name, 'confirm_URL': domain + 'verify_signup.php?email=%s&user_id=%s&exp_id=%s' % (email, str(user_id), str(exp_id))},
+	                 tag = "verify"
+             	)
+	result = message.send()
+	return result
+
+
+def confirm_signup_meditation(email="a@deberker.com", name=""):
 	"""Sends a welcome message to a user.
 	Called by signup_meditation.py. Make sure to use a valid email address, otherwise Postmark gets angry.
 
@@ -20,7 +48,7 @@ def confirm_signup_meditation(name="Tester", email="a@deberker.com"):
 	                 to = email,
 	                 # html_body = "Hey %s! <br><br>Welcome to your very own science lab. You've signed up for the meditation experiment.<br><em>We'll send you your first trial tomorrow!</em>" % name,
 	                 html_body = """
-	                 <h2p>Hey %s!</h2>
+	                 <h2p>Hi %s</h2>
 	                 <p>Welcome to your very own <b>science lab</b>. You've signed up for the <b>meditation experiment</b>.</p>
 	                 <p><em>We'll send you your first trial tomorrow at your requested time!</em></p>
 	                 <p>Warmly,</p>

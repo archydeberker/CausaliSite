@@ -9,15 +9,12 @@
   <body>
   <!-- PHP bit to store data and send email -->
   <?php
-  $type = $_POST["emailType"];
-  $email = $_POST["inputEmail"];
-  // default name
-  //$name = "Prof";
+  $email = $_GET["email"];
+  $user  = $_GET["user_id"];
+  $exp   = $_GET["exp_id"];
 
-  // sanitise input
-  $email_clean = filter_var($email, FILTER_SANITIZE_EMAIL);
-
-  exec("python database/test_email.py '$type' '$email_clean'");
+  # quoting arguments is NOT recommended (https://blogs.msdn.microsoft.com/twistylittlepassagesallalike/2011/04/23/everyone-quotes-command-line-arguments-the-wrong-way/)
+  exec("python database/verify_and_initialise_exp.py '$email' '$user' '$exp'");
   ?>
 
   <div class="container">
@@ -27,8 +24,9 @@
 
     <div class="jumbotron">
       <h1> </h1>
-      <p class="center">Your email address is: <?php echo $email; ?></p>
-      <p class="center">We have sent you the test email you requested, of type <em> <?php echo $type; ?> </em></p>
+      <p class="center">Your email address has been verified. We'll start your experiment soon :)</p>
+
+      <p> If you're looking to get started with guided meditations, check out <a href="https://www.headspace.com"> Headspace </a> for free 10-minute sessions</p>
     </div>
 
 
