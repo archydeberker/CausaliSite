@@ -1,0 +1,11 @@
+
+.mobileDiv {
+	background-color: #0000ff;
+}
+
+@media screen  and (max-width: 320px) {
+
+    .mobileDiv {
+      background-color: #ff0000;
+    }
+}

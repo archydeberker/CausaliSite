@@ -1,0 +1,11 @@
+.morphext > .animated {
+    display: inline-block;
+   	 border-bottom: 2px solid #2ecc71;
+   	 min-width: 10vw;
+}
+
+.morphext > .animated2 {
+    display: inline-block;
+   	 border-bottom: 2px solid red;
+   	 min-width: 10vw;
+}

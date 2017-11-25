@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Causali: properly personal science</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <style type="text/css"> html, body{
+   padding: 0;
+   margin: 0;
+ }
+ #wrap{
+   margin:0 auto;
+   padding:0
+ }
+</style>
+
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+  <link rel="stylesheet" href="dist/css/normalize.css"> 
+  <link rel="stylesheet" href="dist/css/skeleton.css"> 
+  <link rel="stylesheet" href="dist/css/skeleton_custom.css"> 
+  <link rel="stylesheet" href="bower_components/animate.css/animate.min.css"> 
+  <link rel="stylesheet" href="bower_components/Morphext/dist/morphext.css"> 
+
+
+
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div> 
+
+  	<div class="container">
+
+  		<!--style="background-image: url(./assets/flasks.png),url('./assets/beaker.png'); background-position: left bottom, right bottom; background-repeat: no-repeat;"-->
+
+     <div class="one-half column" style="margin-top: 10%">
+       <img src="./assets/logo10Avenir.png" style="max-width:60%;"">
+       <div class="row" style="margin-top:10%">
+
+        <h2>
+          <div style="text-align:left">
+            Does <span id="js-rotating"">meditation,running,coffee</span> make me  <span id="js-rotating2">calmer, thinner, smarter 
+            </span> ? 
+          </div>
+        </h2>
+
+      </div>
+    
+    <div class="row" style="margin-top:5%">
+      <h4 style="text-align: left;"> Conduct experiments to make yourself happier, healthier, and more productive </h4>
+    </div>
+    <div class="row" style="text-align:left">
+      <a class="button button-primary" href="#">Open your lab today</a>
+    </div>
+    <div class="row" style="text-align: left;"> 
+      <a href="#"> Already experimenting? Sign in </a>
+    </div>
+  
+  </div>
+
+  <div class="one-half column phones" style="margin-top: 20%">
+    <img class="phone" src="assets/burner_tube.png">
+  </div>
+
+
+  <!-- Javascript 
+  __________________________________________________ -->
+
+  <script src="http://cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="bower_components/jquery/jquery.min.js"><\/script>')</script>
+  <script src="bower_components/Morphext/dist/morphext.js"></script>
+  <script>
+  	$("#js-rotating").Morphext({
+  		animation: "flipInX",
+  		speed: 4000,
+  		complete: function ($1) {
+  			console.log("This is called after a phrase is animated in! Current phrase index: " + this.index);
+  		}
+  	});
+
+  	$("#js-rotating2").Morphext({
+  		animation: "flipInX",
+  		speed: 4000,
+  		complete: function ($2) {
+  			console.log("This is called after a phrase is animated in! Current phrase index: " + this.index);
+  		}
+  	});
+  </script>
+
+
+<!-- End Document
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
