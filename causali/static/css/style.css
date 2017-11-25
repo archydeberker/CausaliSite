@@ -2,6 +2,13 @@
    App specific CSS file.
    ========================================================================== */
 
+.navbar {
+  background-color:#00B16A;
+}
+.btn-primary {
+  background-color:#00B16A;
+}
+
 /* universal */
 
 html {
